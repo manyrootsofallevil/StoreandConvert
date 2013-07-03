@@ -86,20 +86,22 @@ namespace StoreAndConvert.WindowsService
                 binding = new WebHttpBinding(WebHttpSecurityMode.Transport);
                 binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
                 binding.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
+                binding.CrossDomainScriptAccessEnabled = true;
             }
             else
             {
                 binding = new WebHttpBinding(WebHttpSecurityMode.None);
+                binding.CrossDomainScriptAccessEnabled = true;
             }
 
             // You must create an array of URI objects to have a base address.
-            Uri a = new Uri(addressHttp);
-            Uri[] baseAddresses = new Uri[] { a };
+            Uri uri = new Uri(addressHttp);
+            Uri[] baseAddresses = new Uri[] { uri };
 
             WebHttpBehavior behaviour = new WebHttpBehavior();
             // Add an endpoint to the service. Insert the thumbprint of an X.509 
             // certificate found on your computer. 
-            host.AddServiceEndpoint(typeof(IStoreUrls), binding, a).EndpointBehaviors.Add(behaviour);
+            host.AddServiceEndpoint(typeof(IStoreUrls), binding, uri).EndpointBehaviors.Add(behaviour);
 
             if (useSSLTLS)
             {
