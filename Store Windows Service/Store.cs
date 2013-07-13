@@ -33,7 +33,7 @@ namespace StoreAndConvert.WindowsService
         {
             try
             {
-                //Debugger.Launch();
+               // Debugger.Launch();
                 certSubjectName = ConfigurationManager.AppSettings["CertificateSubjectName"];
 
                 host = new ServiceHost(typeof(StoreUrls));

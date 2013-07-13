@@ -4,7 +4,7 @@
            Name="Installer" 
            Language="1033" 
            Version="1.0.0.0" Manufacturer="Manyrootsofallevil inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate />
@@ -25,9 +25,10 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-      <!-- <Component Id="ProductComponent"> -->
+       <Component Id="ProductComponent"> 
       <!-- TODO: Insert files, registry keys, and other resources here. -->
-      <!-- </Component> -->
+         <File Id="sdsds" Source="../bookmarklet.txt"/>
+       </Component> 
     </ComponentGroup>
   </Fragment>
 </Wix>

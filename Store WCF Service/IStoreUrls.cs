@@ -12,7 +12,7 @@ namespace StoreAndConvert.WCFService
     {
         [OperationContract]
          
-        string Store(string url);
+        string Store(string url, string title);
 
     }
 
