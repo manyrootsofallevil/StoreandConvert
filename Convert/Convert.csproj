@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82C690CB-C0C1-4713-9EF4-64DC0990CC4B}</ProjectGuid>
+    <ProjectGuid>{A5ACC9D3-01BE-4A75-A611-C37F9E395C40}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Store</RootNamespace>
-    <AssemblyName>Store</AssemblyName>
+    <RootNamespace>Convert</RootNamespace>
+    <AssemblyName>Convert</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,30 +37,26 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="WcfJsonRestService">
-      <HintPath>..\..\WcfJsonRestService\WcfJsonRestService\bin\Release\WcfJsonRestService.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StoreInstaller.cs">
+    <Compile Include="Convert.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="StoreInstaller.Designer.cs">
-      <DependentUpon>StoreInstaller.cs</DependentUpon>
+    <Compile Include="Convert.Designer.cs">
+      <DependentUpon>Convert.cs</DependentUpon>
     </Compile>
-    <Compile Include="Store.cs">
+    <Compile Include="ConvertInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Store.Designer.cs">
-      <DependentUpon>Store.cs</DependentUpon>
+    <Compile Include="ConvertInstaller.Designer.cs">
+      <DependentUpon>ConvertInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,14 +65,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="StoreInstaller.resx">
-      <DependentUpon>StoreInstaller.cs</DependentUpon>
+    <EmbeddedResource Include="Convert.resx">
+      <DependentUpon>Convert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConvertInstaller.resx">
+      <DependentUpon>ConvertInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Store WCF Service\Store WCF Service.csproj">
-      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
-      <Name>Store WCF Service</Name>
+    <ProjectReference Include="..\HostFeed\HostFeed.csproj">
+      <Project>{3c451a60-cb7a-4342-9d41-05b342bcba6b}</Project>
+      <Name>HostFeed</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

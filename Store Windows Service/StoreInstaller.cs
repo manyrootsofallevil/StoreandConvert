@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace Store
 {
     [RunInstaller(true)]
-    public partial class ProjectInstaller : System.Configuration.Install.Installer
+    public partial class StoreInstaller : System.Configuration.Install.Installer
     {
-        public ProjectInstaller()
+        public StoreInstaller()
         {
             InitializeComponent();
         }

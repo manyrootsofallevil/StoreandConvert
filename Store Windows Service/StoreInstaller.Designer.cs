@@ -1,6 +1,6 @@
 ﻿namespace Store
 {
-    partial class ProjectInstaller
+    partial class StoreInstaller
     {
         /// <summary>
         /// Required designer variable.

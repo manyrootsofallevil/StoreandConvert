@@ -54,7 +54,8 @@ namespace StoreAndConvert.WindowsService
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(ex);
+                Trace.WriteLine(string.Format("An error occurred during start up. Exception:",ex));
+                throw;
             }
 
         }
