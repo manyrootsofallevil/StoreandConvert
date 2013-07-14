@@ -25,23 +25,14 @@ namespace Convert
 
         protected override void OnStart(string[] args)
         {
-            nextRunTime = setNextRunTime();
+            Debugger.Launch();
+            nextRunTime = GetNextRunTime();
             ticker.Enabled = true;
         }
 
         protected override void OnStop()
         {
             ticker.Enabled = false;
-        }
-
-        private DateTime setNextRunTime()
-        {
-            DateTime runTime = DateTime.Parse(ConfigurationManager.AppSettings["runtime"]);
-
-            //return runTime.AddDays(int.Parse(ConfigurationManager.AppSettings["Interval"]));
-
-            //TODO: need to write the last runtime to the config file? so that the next run time can be calculated from there, 
-            // as otherwise starting and stopping would mess it up
         }
 
         private void ticker_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -52,51 +43,84 @@ namespace Convert
 
                 ConvertUserExternalTool();
 
-                nextRunTime = setNextRunTime();
+                nextRunTime = SetNextRunTime();
 
                 Host.Stop();
             }
         }
 
+        private DateTime GetNextRunTime()
+        {
+            DateTime runTime, result;
+
+            if (DateTime.TryParse(ConfigurationManager.AppSettings["nextruntime"], out runTime))
+            {
+                result = runTime;
+            }
+            else
+            {
+                result = SetNextRunTime();
+            }
+
+            return result;
+        }
+
+        private DateTime SetNextRunTime()
+        {
+            DateTime runTime = DateTime.Parse(ConfigurationManager.AppSettings["runtime"]);
+            runTime = runTime.AddDays(int.Parse(ConfigurationManager.AppSettings["interval"]));
+
+            string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(exePath);
+            config.AppSettings.Settings["NextRunTime"].Value = runTime.ToString();
+            config.Save();
+
+            ConfigurationManager.RefreshSection("appSettings");
+
+            return runTime;
+
+        }
+
         //TODO: Fix this. ta da!!!!
         private void ConvertUserExternalTool()
         {
-            if (this.ItemList.Count() > 0)
-            {
-                string exePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            //if (this.ItemList.Count() > 0)
+            //{
+            //    string exePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-                ImageModifier image = new ImageModifier(string.Format("{0}\\Images\\beastie.jpg", exePath));
+            //    ImageModifier image = new ImageModifier(string.Format("{0}\\Images\\beastie.jpg", exePath));
 
-                if (System.IO.Path.GetFileNameWithoutExtension(saveFileName).Equals(
-                    DateTime.Now.ToString("yyyyMMdd"), StringComparison.InvariantCultureIgnoreCase))
-                {
-                    image.WriteMessageToImage(DateTime.Now.ToLongDateString(), "modifiedbeastie.jpg");
-                }
-                else
-                {
-                    image.WriteMessageToImage(System.IO.Path.GetFileNameWithoutExtension(saveFileName), DateTime.Now.ToLongDateString(), "modifiedbeastie.jpg");
-                }
+            //    if (System.IO.Path.GetFileNameWithoutExtension(saveFileName).Equals(
+            //        DateTime.Now.ToString("yyyyMMdd"), StringComparison.InvariantCultureIgnoreCase))
+            //    {
+            //        image.WriteMessageToImage(DateTime.Now.ToLongDateString(), "modifiedbeastie.jpg");
+            //    }
+            //    else
+            //    {
+            //        image.WriteMessageToImage(System.IO.Path.GetFileNameWithoutExtension(saveFileName), DateTime.Now.ToLongDateString(), "modifiedbeastie.jpg");
+            //    }
 
-                CompletedConversion = Common.RunExternalApplication(AppType.EbookConverter,
-                           string.Format("{0} \"{1}\" --authors {2} --title {3} --cover {4}",
-                           ConfigurationManager.AppSettings["newsrecipepath"],
-                                                              saveFileName,
-                           ConfigurationManager.AppSettings["author"],
-                           DateTime.Now.ToString("yyyyMMdd"),
-                           string.Format("\"{0}\\modifiedbeastie.jpg\"", exePath)));
+            //    CompletedConversion = Common.RunExternalApplication(AppType.EbookConverter,
+            //               string.Format("{0} \"{1}\" --authors {2} --title {3} --cover {4}",
+            //               ConfigurationManager.AppSettings["newsrecipepath"],
+            //                                                  saveFileName,
+            //               ConfigurationManager.AppSettings["author"],
+            //               DateTime.Now.ToString("yyyyMMdd"),
+            //               string.Format("\"{0}\\modifiedbeastie.jpg\"", exePath)));
 
-                //Should really migrate the whole thing to use MVVM.
-                if (CompletedConversion)
-                {
-                    Emailer.Hotmail(string.Format("{0}", saveFileName));
+            //    //Should really migrate the whole thing to use MVVM.
+            //    if (CompletedConversion)
+            //    {
+            //        Emailer.Hotmail(string.Format("{0}", saveFileName));
 
-                    Trace.WriteLine("Converted book can be found here {1}{0}.mobi", DateTime.Now.ToString("yyyyMMdd")
-                         , ConfigurationManager.AppSettings["savefilepath"]);
-                }
+            //        Trace.WriteLine("Converted book can be found here {1}{0}.mobi", DateTime.Now.ToString("yyyyMMdd")
+            //             , ConfigurationManager.AppSettings["savefilepath"]);
+            //    }
 
 
 
-            }
         }
+
     }
 }
