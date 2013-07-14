@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,8 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateRSSData.cs" />
     <Compile Include="Emailer.cs" />
+    <Compile Include="EncryptAppConfig.cs" />
+    <Compile Include="FileHandler.cs" />
+    <Compile Include="ImageModifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunExternalApplication.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HostFeed\HostFeed.csproj">
+      <Project>{3c451a60-cb7a-4342-9d41-05b342bcba6b}</Project>
+      <Name>HostFeed</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
