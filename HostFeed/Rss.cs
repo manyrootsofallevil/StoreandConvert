@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -37,6 +38,8 @@ namespace HostFeed
 
         private SyndicationFeed getBlog()
         {
+            Trace.TraceInformation("getBlog Started.");
+
             SyndicationFeed feed = new SyndicationFeed("My Blog Feed", "This is a test feed", new Uri("http://ManyRootsofAllEvil.blogger.com"));
             feed.Authors.Add(new SyndicationPerson("ManyRootsofAllEvil@ManyRootsofAllEvil.com"));
             feed.Categories.Add(new SyndicationCategory("Interesting articles"));
@@ -52,14 +55,20 @@ namespace HostFeed
                 {
                     items.Add(new SyndicationItem(element.Attribute("title").Value,
                               element.Attribute("content").Value, new Uri(element.Attribute("URI").Value)));
+
+                    Trace.TraceInformation("{0} @ {1} has been added to the feed list.",
+                        element.Attribute("title").Value, element.Attribute("URI").Value);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //Let's swallow the exception. perphas we should log it :)
+                    Trace.TraceError("Arghh!!!! Ex: {0}", ex);
+                    throw;
                 }
             }
 
             feed.Items = items;
+
+            Trace.TraceInformation("getBlog Finishing.");
 
             return feed;
         }

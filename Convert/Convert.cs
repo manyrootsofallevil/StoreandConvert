@@ -26,17 +26,18 @@ namespace Convert
 
         protected override void OnStart(string[] args)
         {
-            //Debugger.Launch();
-            //TODO: why is this failing to work???
+#if DEBUG
+            Debugger.Launch();
+            ticker.Interval = 10000;
+#endif
+            //TODO: No idea why this is not working first time, so leaving it here as a backup.
+            //Use .\aspnet_regiis.exe -pef appSettings <app directory path> instead post install.
             EncryptAppConfig.EncryptAppSettings();
 
-
             nextRunTime = GetNextRunTime();
-            //ticker.Interval = 10000;
+
             ticker.Enabled = true;
 
-            ConfigurationManager.RefreshSection("configuration");
-           
         }
 
         protected override void OnStop()
@@ -104,39 +105,33 @@ namespace Convert
         private void ConvertUsingExternalTool()
         {
             bool completedConversion;
-            //TODO: handle trailing slash\\
-            string saveFileName = string.Format("{0}{1}",ConfigurationManager.AppSettings["savefilepath"],
+
+            string saveFileName = string.Format(@"{0}\{1}", ConfigurationManager.AppSettings["savefilepath"].Trim('\\'),
                 string.Format(ConfigurationManager.AppSettings["OutputFileNamePattern"], DateTime.Now));
 
             string exePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-
-            //TODO: Get this working.
-            ImageModifier image = new ImageModifier(string.Format("{0}\\Images\\beastie.jpg", exePath));
+            ImageModifier image = new ImageModifier(string.Format(@"{0}\Images\beastie.jpg", exePath));
 
             if (System.IO.Path.GetFileNameWithoutExtension(saveFileName).Equals(
                 DateTime.Now.ToString("yyyyMMdd"), StringComparison.InvariantCultureIgnoreCase))
             {
-                image.WriteMessageToImage(DateTime.Now.ToLongDateString(), "modifiedbeastie.jpg");
+                image.WriteMessageToImage(DateTime.Now.ToLongDateString(),
+                    string.Format(@"{0}\frontpage.jpg", exePath.Trim('\\')));
             }
             else
             {
-                image.WriteMessageToImage(System.IO.Path.GetFileNameWithoutExtension(saveFileName), DateTime.Now.ToLongDateString(), "modifiedbeastie.jpg");
+                image.WriteMessageToImage(System.IO.Path.GetFileNameWithoutExtension(saveFileName), DateTime.Now.ToLongDateString(),
+                    string.Format(@"{0}\frontpage.jpg", exePath.Trim('\\')));
             }
 
-            //completedConversion = RunExternalApplication.RunExternalApp(AppType.EbookConverter,
-            //           string.Format("{0} \"{1}\" --authors {2} --title {3} --cover {4}",
-            //           ConfigurationManager.AppSettings["newsrecipepath"],
-            //                                              saveFileName,
-            //           ConfigurationManager.AppSettings["author"],
-            //           DateTime.Now.ToString("dd - MMM - yyyy"),
-            //           string.Format("\"{0}\\modifiedbeastie.jpg\"", exePath)));
             completedConversion = RunExternalApplication.RunExternalApp(AppType.EbookConverter,
-                       string.Format("{0} \"{1}\" --authors {2} --title {3}",
+                       string.Format("{0} \"{1}\" --authors {2} --title {3} --cover {4}",
                        ConfigurationManager.AppSettings["newsrecipepath"],
                                                           saveFileName,
                        ConfigurationManager.AppSettings["author"],
-                       DateTime.Now.ToString("\"dd-MMM-yyyy\"")));
+                       DateTime.Now.ToString("\"dd-MMM-yyyy\""),
+                        string.Format("\"{0}\\frontpage.jpg\"", exePath.Trim('\\'))));
 
             if (completedConversion)
             {
