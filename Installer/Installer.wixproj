@@ -24,7 +24,27 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Convert.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="Store.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Convert\Convert.csproj">
+      <Name>Convert</Name>
+      <Project>{a5acc9d3-01be-4a75-a611-c37f9e395c40}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Store Windows Service\Store.csproj">
+      <Name>Store</Name>
+      <Project>{82c690cb-c0c1-4713-9ef4-64dc0990cc4b}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

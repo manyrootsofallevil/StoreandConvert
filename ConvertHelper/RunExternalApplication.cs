@@ -14,18 +14,13 @@ namespace ConvertHelper
     {
         public static bool RunExternalApp(AppType app, string arguments)
         {
-
-            Trace.TraceInformation(string.Format("RunExternalApplication {0} {1}.", app.ToString(), arguments));
+            Trace.TraceInformation("RunExternalApplication {0} {1}.", app.ToString(), arguments);
 
             bool output = false;
 
             switch (app)
             {
-                case AppType.Browser:
-                    Process.Start(ConfigurationManager.AppSettings["Browser"], arguments);
-                    break;
                 case AppType.EbookConverter:
-                    //Process.Start(, arguments);
                     var proc = new Process
                     {
                         StartInfo = new ProcessStartInfo
@@ -37,7 +32,9 @@ namespace ConvertHelper
                             CreateNoWindow = true
                         }
                     };
+
                     proc.Start();
+
                     while (!proc.StandardOutput.EndOfStream)
                     {
                         string line = proc.StandardOutput.ReadLine().ToLower();
@@ -50,14 +47,8 @@ namespace ConvertHelper
                         }
                     }
                     break;
-                case AppType.EbookViewer:
-                    Process.Start(ConfigurationManager.AppSettings["EbookViewer"], arguments);
-                    break;
-
-
-
             }
-            //TODO: Have a look at this to get the ouput from ebook converter process
+
             return output;
         }
     }

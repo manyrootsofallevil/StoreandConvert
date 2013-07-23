@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter.cs" />
     <Compile Include="CreateRSSData.cs" />
     <Compile Include="Emailer.cs" />
     <Compile Include="EncryptAppConfig.cs" />

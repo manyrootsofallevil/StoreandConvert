@@ -57,5 +57,10 @@ namespace ConvertHelper
             DrawingSurface.DrawString(message, TextFont, TextBrush, messageRectangle, TextFormat);
             GreetingImage.Save(outputFile, ImageFormat.Jpeg);
         }
+
+        public override string ToString()
+        {
+            return FileName;
+        }
     }
 }

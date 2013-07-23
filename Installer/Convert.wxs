@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <DirectoryRef Id="TARGETDIR">
+      <Directory Id="dir39B22699688E51DCD8DCBB99A47E835B" Name="Debug" />
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="Convert">
+      <Component Id="cmpDF639867D0E3ACC56847C3D0FADAC620" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
+        <File Id="fil6106E04F8E30C7C6883360EF38CF5899" KeyPath="yes" Source="$(var.Convert.TargetDir)\Convert.exe" />
+        <File Id="fil1B3C059B5F0CAE13A466A0641CE5FE34"  Source="$(var.Convert.TargetDir)\Convert.exe.config" />
+        <ServiceInstall DisplayName="Convert Urls" Name="ConvertUrls" Description="Convert stored urls by the Store Urls service to ebook (mobi)"
+                Account="NT AUTHORITY\LocalService" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
+        <ServiceControl Id="ConvertUrlsControl" Name="ConvertUrls" Start="install" Stop="uninstall" Remove="uninstall"/>
+      </Component>
+      <Component Id="cmp0A8D64A2A28BD29C23AF74D9EB4F1B86" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
+        <File Id="filA7F27767E15EB074EC90BD604F1D1CEB" KeyPath="yes" Source="$(var.Convert.TargetDir)\ConvertHelper.dll" />
+      </Component>
+      <Component Id="cmpEB60980D81B43EFDBE71EEA9F800ED12" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
+        <File Id="fil1FA82320BBFBF915952A5F35267EAD3B" KeyPath="yes" Source="$(var.Convert.TargetDir)\HostFeed.dll" />
+      </Component>
+      <Component Id="cmpEE4111D4E8DB3D3401BD81A7EB1CD907" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
+        <File Id="fil644A2A100059354CBBC99474DCA60B93" KeyPath="yes" Source="$(var.Convert.TargetDir)\HtmlAgilityPack.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
