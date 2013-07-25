@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using StoreAndConvert.WCFService;
 using System.Security.Cryptography.X509Certificates;
 using System.Configuration;
+using Microsoft.Web.Administration;
 
 
 namespace StoreAndConvert.WindowsService
@@ -33,13 +34,13 @@ namespace StoreAndConvert.WindowsService
         {
             try
             {
-               // Debugger.Launch();
+               //Debugger.Launch();
                 certSubjectName = ConfigurationManager.AppSettings["CertificateSubjectName"];
 
                 host = new ServiceHost(typeof(StoreUrls));
 
-                AddServiceEndPoint(host, "https://{0}/storeurl", true, certSubjectName);
-                AddServiceEndPoint(host, "http://{0}/storeurl", false);
+                AddServiceEndPoint(host, "https://{0}:3141/storeurl", true, certSubjectName);
+                AddServiceEndPoint(host, "http://{0}:2718/storeurl", false);
 
                 host.Open();
 
@@ -112,6 +113,18 @@ namespace StoreAndConvert.WindowsService
                     X509FindType.FindBySubjectName,
                     certSubjectName);
             }
+        }
+
+        private bool EnsureSSLBinding()
+        {
+            bool result = false;
+
+            using (ServerManager serverManager = new ServerManager())
+            {
+                //serverManager
+            }
+
+            return result;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace StoreAndConvert.WCFService
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(string.Format("Exception: {0}.", ex));
+                Trace.TraceError("Exception: {0}.", ex);
                 return ex.ToString();
             }
         }

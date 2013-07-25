@@ -11,7 +11,7 @@
         <File Id="fil9EA951DEEF8E32A9F66527455DA3C55F" KeyPath="yes" Source="$(var.Store.TargetDir)\Store.exe" />
         <File Id="fil3A01202C0345E42107E335FDD0FF6986" Source="$(var.Store.TargetDir)\Store.exe.config" />
         <ServiceInstall DisplayName="Store Urls" Name="StoreUrls" Description="Store Urls for later conversion to ebook (mobi)"
-                        Account="NT AUTHORITY\LocalService" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
+                        Account="NT AUTHORITY\Network Service" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
         <ServiceControl Id="StoreUrlsControl" Name="StoreUrls" Start="install" Stop="uninstall" Remove="uninstall"/>
        </Component>
 
