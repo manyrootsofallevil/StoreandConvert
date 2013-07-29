@@ -7,16 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store WCF Service", "Store 
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Installer", "Installer\Installer.wixproj", "{7259BBEA-4B01-400C-A3B6-5BA035068133}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94157229-F3C8-47AD-AAAA-60C6A515180E}"
-	ProjectSection(SolutionItems) = preProject
-		Bookmarklet.txt = Bookmarklet.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convert", "Convert\Convert.csproj", "{A5ACC9D3-01BE-4A75-A611-C37F9E395C40}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertHelper", "ConvertHelper\ConvertHelper.csproj", "{94CE1596-C59C-453A-BECF-FF60BB32DCC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostFeed", "HostFeed\HostFeed.csproj", "{3C451A60-CB7A-4342-9D41-05B342BCBA6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomAction", "CustomAction\CustomAction.csproj", "{06FA3049-9E37-4881-A21E-CFC433789443}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +85,16 @@ Global
 		{3C451A60-CB7A-4342-9D41-05B342BCBA6B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3C451A60-CB7A-4342-9D41-05B342BCBA6B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3C451A60-CB7A-4342-9D41-05B342BCBA6B}.Release|x86.ActiveCfg = Release|Any CPU
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Debug|x86.ActiveCfg = Debug|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Debug|x86.Build.0 = Debug|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|Any CPU.ActiveCfg = Release|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|Mixed Platforms.Build.0 = Release|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|x86.ActiveCfg = Release|x86
+		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

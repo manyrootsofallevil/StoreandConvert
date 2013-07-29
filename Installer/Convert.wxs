@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <DirectoryRef Id="TARGETDIR">
-      <Directory Id="dir39B22699688E51DCD8DCBB99A47E835B" Name="Debug" />
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Directory Id="dir39B22699688E51DCD8DCBB99A47E835B" Name="Convert" />
     </DirectoryRef>
   </Fragment>
   <Fragment>
@@ -10,9 +10,10 @@
       <Component Id="cmpDF639867D0E3ACC56847C3D0FADAC620" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
         <File Id="fil6106E04F8E30C7C6883360EF38CF5899" KeyPath="yes" Source="$(var.Convert.TargetDir)\Convert.exe" />
         <File Id="fil1B3C059B5F0CAE13A466A0641CE5FE34"  Source="$(var.Convert.TargetDir)\Convert.exe.config" />
-        <ServiceInstall DisplayName="Convert Urls" Name="ConvertUrls" Description="Convert stored urls by the Store Urls service to ebook (mobi)"
+        <ServiceInstall DisplayName="Convert Urls to Periodical" Name="ConvertUrls" Description="Convert stored urls by the Store Urls service to ebook (mobi)"
                 Account="NT AUTHORITY\Network Service" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
-        <ServiceControl Id="ConvertUrlsControl" Name="ConvertUrls" Start="install" Stop="uninstall" Remove="uninstall"/>
+  
+        <ServiceControl Id="ConvertUrlsControl" Name="ConvertUrls" Stop="both" Remove="uninstall"/>
       </Component>
       <Component Id="cmp0A8D64A2A28BD29C23AF74D9EB4F1B86" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
         <File Id="filA7F27767E15EB074EC90BD604F1D1CEB" KeyPath="yes" Source="$(var.Convert.TargetDir)\ConvertHelper.dll" />

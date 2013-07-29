@@ -1,23 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="63C69432-ADC1-4A6E-9DF3-4D0CC57F505F"
-           Name="Installer" 
-           Language="1033" 
+           Name="Store and Convert"
+           Language="1033"
            Version="1.0.0.0" Manufacturer="Manyrootsofallevil inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-    <MediaTemplate />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
-    <Feature Id="ProductFeature" Title="Installer" Level="1">
-      <ComponentGroupRef Id="ProductComponents" />
+    <Property Id="FRAMEWORKBASEPATH">
+      <RegistrySearch Id="FindFrameworkDir" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework" Name="InstallRoot" Type="raw" Win64="yes"/>
+    </Property>
+    <Property Id="ASPNETREGIIS" >
+      <DirectorySearch Path="[FRAMEWORKBASEPATH]" Depth="4" Id="FindAspNetRegIis">
+        <FileSearch Name="aspnet_regiis.exe" MinVersion="4.0.3"/>
+      </DirectorySearch>
+    </Property>
+
+    <Property Id="SSLPORT" Value="31415"/>
+    <Property Id="HTTPPORT" Value="27182"/>
+
+    <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+      <Feature Id="Store" Title="Store" Level="1"  >
+        <ComponentGroupRef Id="ProductComponents" />
+        <ComponentGroupRef Id="Store" />
+      </Feature>
+      <Feature Id ="Convert" Title="Convert" Level="1">
+        <ComponentGroupRef Id="Convert" />
+      </Feature>
     </Feature>
+
+
+    <Binary Id="CA" SourceFile="$(var.CustomAction.TargetDir)CustomAction.CA.dll"/>
+    <CustomAction Id="GiveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" />
+    <CustomAction Id="EncryptConfigFile" BinaryKey="CA" DllEntry="EncryptConfigFile" Execute="immediate" />
+    <CustomAction Id="DropTrailingSlash" BinaryKey="CA" DllEntry="DropTrailingSlash" Execute="immediate" />
+    <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey NT Authority\Network Service"  Return="check"/>
+    <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr 'NetFrameWorkConfigurationKey' 'NT Authority\Network Service'"  Return="check"/>
+
+    <InstallExecuteSequence>
+      <Custom Action="DropTrailingSlash" Before="InstallFinalize"></Custom>
+      
+      <Custom Action="GiveWriteAccess" After="InstallFinalize">NOT Installed</Custom>
+      <Custom Action="EncryptConfigFile" After="GiveWriteAccess">NOT Installed</Custom>
+      <Custom Action="GrantAccessToConfig" After="EncryptConfigFile">NOT Installed</Custom>
+
+      <Custom Action="RemoveAccessToConfig" After="InstallFinalize">Installed</Custom>
+    </InstallExecuteSequence>
+
+    <InstallUISequence>
+      <!--<Custom Action="GetInstalledCertificates" After="CostFinalize" Overridable="yes">NOT Installed</Custom>-->
+    </InstallUISequence>
+
+    <UI>
+      <UIRef Id="GUI"/>
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+
   </Product>
 
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="Installer" />
+        <Directory Id="INSTALLFOLDER" Name="Store And Convert" />
       </Directory>
     </Directory>
   </Fragment>
@@ -25,15 +71,16 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-       <Component Id="ProductComponent"> 
-      <!-- TODO: Insert files, registry keys, and other resources here. -->
-         <File Id="sdsds" Source="../bookmarklet.txt"/>
-       </Component> 
+      <Component Id="ProductComponent">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Id="sdsds" Source="../Misc/bookmarklet.txt"/>
+      </Component>
     </ComponentGroup>
   </Fragment>
+
 </Wix>
 
-Things that need thinking about:
+<!--Things that need thinking about:
 
 URL reservations for the following ports (probably a good idea to let the user choose ports or even check that it's not in use)
 
@@ -48,4 +95,4 @@ Permissions for directories need to be set
 
 Change config file so that the directories are relative (probably program files)
 
-Write out bookmarklet to respect ports and host name/fqdn
+Write out bookmarklet to respect ports and host name/fqdn-->
