@@ -10,14 +10,20 @@ namespace CustomAction
 {
     public class CustomActions
     {
+        //hard coded just because
+        static string user = @"NT AUTHORITY\Network Service";
+
         [CustomAction]
         public static ActionResult GiveWriteAccess(Session session)
         {
             ActionResult result = ActionResult.Failure;
+            bool results = false;
             // Debugger.Launch();
             session.Log("Begin GiveWriteAccess");
 
-            result = CustomActionHelper.SetAcl(@"NT AUTHORITY\Network Service", session["INSTALLFOLDER"], session) == true
+            results = CustomActionHelper.SetAcl(user, Path.Combine(session["AppDataFolder"], "WebPages"), session);
+
+            result = results && CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
                 ? ActionResult.Success : ActionResult.Failure;
 
             session.Log("End GiveWriteAccess");
@@ -41,36 +47,30 @@ namespace CustomAction
         }
 
         [CustomAction]
-        public static ActionResult DropTrailingSlash(Session session)
+        public static ActionResult GetInstalledCertificates(Session session)
         {
+            ActionResult result = ActionResult.Failure;
 
-            session.Log("Begin DropTrailingSlash");
+            session.Log("Start GetInstalledCertificates");
 
-            session["ASPNETREGIIS"] = session["ASPNETREGIIS"].ToString().Trim();
+            //Debugger.Launch();
 
-            var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = session["ASPNETREGIIS"],
-                    Arguments = " -pa 'NetFrameWorkConfigurationKey' 'NT Authority\\Network Service'",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
+            View cView = session.Database.OpenView("select * from ComboBox");
+            cView.Execute();
 
-            session.Log("{0}{1}", session["ASPNETREGIIS"], "-pa 'NetFrameWorkConfigurationKey' 'NT Authority\\Network Service'");
+            CustomActionHelper.PopulateDropDownList(session, cView);
 
-            proc.Start();
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                session.Log(proc.StandardOutput.ReadLine());
-            }
-            session.Log("End DropTrailingSlash");
+            cView.Close();
 
-            return ActionResult.Success;
+            session.Log("End GetInstalledCertificates");
+
+            result = ActionResult.Success;
+
+            return result;
+
+
         }
+
 
     }
 

@@ -34,13 +34,13 @@ namespace StoreAndConvert.WindowsService
         {
             try
             {
-               //Debugger.Launch();
+                //Debugger.Launch();
                 certSubjectName = ConfigurationManager.AppSettings["CertificateSubjectName"];
 
                 host = new ServiceHost(typeof(StoreUrls));
 
-                AddServiceEndPoint(host, "https://{0}:3141/storeurl", true, certSubjectName);
-                AddServiceEndPoint(host, "http://{0}:2718/storeurl", false);
+                AddServiceEndPoint(host, "https://{0}:{1}/storeurl", true, certSubjectName);
+                AddServiceEndPoint(host, "http://{0}:{1}/storeurl", false);
 
                 host.Open();
 
@@ -55,7 +55,7 @@ namespace StoreAndConvert.WindowsService
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(string.Format("An error occurred during start up. Exception:",ex));
+                Trace.WriteLine(string.Format("An error occurred during start up. Exception:", ex));
                 throw;
             }
 
@@ -78,8 +78,7 @@ namespace StoreAndConvert.WindowsService
 
         private void AddServiceEndPoint(ServiceHost host, string url, bool useSSLTLS, string certSubjectName = "")
         {
-            string addressHttp = String.Format(url,
-                System.Net.Dns.GetHostEntry("").HostName);
+            string addressHttp = string.Empty;
 
             WebHttpBinding binding;
 
@@ -89,11 +88,18 @@ namespace StoreAndConvert.WindowsService
                 binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
                 binding.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
                 binding.CrossDomainScriptAccessEnabled = true;
+
+                addressHttp = String.Format(url,
+                System.Net.Dns.GetHostEntry("").HostName, ConfigurationManager.AppSettings["SSLPort"]);
+
             }
             else
             {
                 binding = new WebHttpBinding(WebHttpSecurityMode.None);
                 binding.CrossDomainScriptAccessEnabled = true;
+
+                addressHttp = String.Format(url,
+              System.Net.Dns.GetHostEntry("").HostName, ConfigurationManager.AppSettings["HTTPPort"]);
             }
 
             // You must create an array of URI objects to have a base address.

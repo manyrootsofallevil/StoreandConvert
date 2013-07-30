@@ -36,7 +36,7 @@ namespace StoreAndConvert.WCFService
             Trace.WriteLine(string.Format("Storing: {0}.", url));
 
             XDocument xdoc = null;
-            string fileName = string.Format("{0}{1:yyyyMMdd}.xml", StoreDirectory, DateTime.Now);
+            string fileName = Path.Combine(StoreDirectory, string.Format("{0:yyyyMMdd}.xml", DateTime.Now));
 
 
             //I don't think content is used for anything. The periodicals use the url and title only

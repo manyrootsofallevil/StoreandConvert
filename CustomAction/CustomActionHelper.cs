@@ -6,16 +6,23 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CustomAction
 {
-    public static class CustomActionHelper
+    internal static class CustomActionHelper
     {
-        public static bool SetAcl(string user, string destinationDirectory, Session session)
+        internal static bool SetAcl(string user, string destinationDirectory, Session session)
         {
             session.Log("Begin SetACL. User: {0}. Directory: {1}", user, destinationDirectory);
+
+            if (!Directory.Exists(destinationDirectory))
+            {
+                session.Log("Creating Directory {0}", destinationDirectory);
+                Directory.CreateDirectory(destinationDirectory);
+            }
         
             FileSystemRights Rights = (FileSystemRights)0;
             Rights = FileSystemRights.FullControl;
@@ -59,7 +66,7 @@ namespace CustomAction
             return true;
         }
 
-        public static bool EncryptAppSettings(string destinationDirectory, string exeName)
+        internal static bool EncryptAppSettings(string destinationDirectory, string exeName)
         {
 
             Trace.TraceInformation("Encrypting App Settings");
@@ -95,6 +102,36 @@ namespace CustomAction
             }
 
             return true;
+        }
+
+        internal static void PopulateDropDownList(Session session, View cView)
+        {
+            X509Store store = new X509Store("My", StoreLocation.LocalMachine);
+
+            store.Open(OpenFlags.ReadOnly);
+
+            int i = 1;
+
+            session.Log("Enumerate Certificates");
+
+            foreach (X509Certificate2 cert in store.Certificates)
+            {
+                session.Log(string.Format("Processing {0}", cert.SubjectName.Name));
+
+                Record record = new Record(3);
+
+                string friendlyName = string.IsNullOrEmpty(cert.FriendlyName) ? cert.SubjectName.Name : cert.FriendlyName;
+
+                record.SetString(1, "CERT");
+                record.SetInteger(2, i);
+                record.SetString(3, cert.SubjectName.Name.Split('=').Skip(1).Take(1).FirstOrDefault());
+
+                session.Log(string.Format("Adding Record {0} {1}.", i, friendlyName));
+
+                cView.Modify(ViewModifyMode.InsertTemporary, record);
+
+                i++;
+            }
         }
     }
 }

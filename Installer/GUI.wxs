@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>
+    <EnsureTable Id='ComboBox'/>
+    
     <UI Id="GUI">
       <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
       <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
@@ -52,16 +54,18 @@
         <Control Id="Email" Type="Edit" X="161" Y="110" Width="180" Height="15" Property="EMAIL" ToolTip="The sending email address"/>
         <Control Id="lPassword" Type="Text" X="20" Y="130" Width="135" Height="13" Text="Email Address Password:" />
         <Control Id="Password" Type="Edit" Password="yes" X="161" Y="130" Width="180" Height="15" Property="PASSWORD" ToolTip="This will be encrypted" />        
-        <Control Id="CertLabel" Type="Text" X="20" Y="150" Width="135" Height="13" Text="Select Certificate:" />
-        <!--<Control Type="ComboBox" Property="CERT" Id="WebSiteCombo" X="161" Y="150" Width="180" Height="15" ComboList="yes" Sorted="yes" />-->
-       
+        <Control Id="lCert" Type="Text" X="20" Y="150" Width="135" Height="13" Text="Select Certificate:" />
+        <Control Type="ComboBox" Property="CERT" Id="CertList" X="161" Y="150" Width="180" Height="15" ComboList="yes" Sorted="yes" />
+        
+
+        
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
           <Condition Action="disable">
-            (SSLPORT = "") OR (HTTPPORT="") 
+            (SSLPORT = "") OR (HTTPPORT="") OR (CERT="")
           </Condition>
           <Condition Action="enable">
-            <![CDATA[(SSLPORT <> "") AND (HTTPPORT<>"")]]>
+            <![CDATA[(SSLPORT <> "") AND (HTTPPORT<>"") AND (CERT<>"")]]>
           </Condition>
         </Control>
         <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back" />

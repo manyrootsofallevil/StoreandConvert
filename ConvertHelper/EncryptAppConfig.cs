@@ -15,31 +15,10 @@ namespace ConvertHelper
 
             Trace.TraceInformation("Encrypting App Settings");
 
-            var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = @"C:\Windows\Microsoft.NET\Framework\v4.0.30319\aspnet_regiis.exe",
-                    Arguments = "-pa 'NetFrameWorkConfigurationKey' 'NT Authority\\Network Service'",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
-
-      
-            proc.Start();
-            while (!proc.StandardOutput.EndOfStream)
-            {
-               Trace.TraceInformation(proc.StandardOutput.ReadLine());
-            }
-
 
             // Get the current configuration file.
             Configuration config =
                     ConfigurationManager.OpenExeConfiguration(System.Reflection.Assembly.GetCallingAssembly().Location);
-
-
 
             ConfigurationSection section = config.GetSection("appSettings");
 

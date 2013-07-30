@@ -10,7 +10,7 @@
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <Property Id="FRAMEWORKBASEPATH">
-      <RegistrySearch Id="FindFrameworkDir" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework" Name="InstallRoot" Type="raw" Win64="yes"/>
+      <RegistrySearch Id="FindFrameworkDir" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework" Name="InstallRoot" Type="raw" Win64="no"/>
     </Property>
     <Property Id="ASPNETREGIIS" >
       <DirectorySearch Path="[FRAMEWORKBASEPATH]" Depth="4" Id="FindAspNetRegIis">
@@ -21,36 +21,25 @@
     <Property Id="SSLPORT" Value="31415"/>
     <Property Id="HTTPPORT" Value="27182"/>
 
-    <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
-      <Feature Id="Store" Title="Store" Level="1"  >
-        <ComponentGroupRef Id="ProductComponents" />
-        <ComponentGroupRef Id="Store" />
-      </Feature>
-      <Feature Id ="Convert" Title="Convert" Level="1">
-        <ComponentGroupRef Id="Convert" />
-      </Feature>
-    </Feature>
-
-
     <Binary Id="CA" SourceFile="$(var.CustomAction.TargetDir)CustomAction.CA.dll"/>
+    <CustomAction Id="GetInstalledCertificates" BinaryKey="CA" DllEntry="GetInstalledCertificates" Execute="immediate" Return="ignore"/>
     <CustomAction Id="GiveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" />
     <CustomAction Id="EncryptConfigFile" BinaryKey="CA" DllEntry="EncryptConfigFile" Execute="immediate" />
-    <CustomAction Id="DropTrailingSlash" BinaryKey="CA" DllEntry="DropTrailingSlash" Execute="immediate" />
-    <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey NT Authority\Network Service"  Return="check"/>
-    <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr 'NetFrameWorkConfigurationKey' 'NT Authority\Network Service'"  Return="check"/>
+    <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
+    <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
 
     <InstallExecuteSequence>
-      <Custom Action="DropTrailingSlash" Before="InstallFinalize"></Custom>
-      
+      <!--These run on install-->
       <Custom Action="GiveWriteAccess" After="InstallFinalize">NOT Installed</Custom>
       <Custom Action="EncryptConfigFile" After="GiveWriteAccess">NOT Installed</Custom>
       <Custom Action="GrantAccessToConfig" After="EncryptConfigFile">NOT Installed</Custom>
 
+      <!--this runs on uninstall-->
       <Custom Action="RemoveAccessToConfig" After="InstallFinalize">Installed</Custom>
     </InstallExecuteSequence>
 
     <InstallUISequence>
-      <!--<Custom Action="GetInstalledCertificates" After="CostFinalize" Overridable="yes">NOT Installed</Custom>-->
+      <Custom Action="GetInstalledCertificates" After="CostFinalize" Overridable="yes">NOT Installed</Custom>
     </InstallUISequence>
 
     <UI>
@@ -58,10 +47,31 @@
       <UIRef Id="WixUI_ErrorProgressText" />
     </UI>
 
+  
+    <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+      <Feature Id="Store" Title="Store" Level="1"  >
+        <ComponentGroupRef Id="ProductComponents" />
+        <ComponentGroupRef Id="Store" />
+        <!--<ComponentRef Id="dummyStore"/>-->
+      </Feature>
+      <Feature Id ="Convert" Title="Convert" Level="1">
+        <ComponentGroupRef Id="Convert" />
+      </Feature>
+    </Feature>
+  
   </Product>
-
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
+    <!--  <Directory Id="AppDataFolder" Name="AppDataFolder">
+        <Directory Id="WebPages" Name="WebPages">
+          <Component Id="dummyStore" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
+            <File Id="sdss" Source="../Misc/bookmarklet.txt" KeyPath="yes"/>
+            <RemoveFolder Id="removeme" On="uninstall"/>
+          </Component>
+          <Directory Id="Backup" Name="Backup"/>
+           
+        </Directory>
+      </Directory>-->
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="Store And Convert" />
       </Directory>
@@ -77,6 +87,8 @@
       </Component>
     </ComponentGroup>
   </Fragment>
+  
+
 
 </Wix>
 
