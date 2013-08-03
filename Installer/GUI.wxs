@@ -49,9 +49,9 @@
         <Control Id="lSSLPort" Type="Text"   X="20" Y="70" Width="135" Height="13" Text="SSL Port:" />
         <Control Id="SSLPort" Type="Edit"    X="161" Y="70" Width="180" Height="15" Property="SSLPORT"  Integer="yes" ToolTip="Ensure a number is entered"/>
         <Control Id="lKindle" Type="Text" X="20" Y="90" Width="135" Height="13" Text="Kindle Email:" />
-        <Control Id="Kindle" Type="Edit" X="161" Y="90" Width="180" Height="15" Property="KINDLE" ToolTip="Your Kindle's email address" />
+        <Control Id="Kindle" Type="Edit" X="161" Y="90" Width="180" Height="15" Property="KINDLEEMAILADDRESS" ToolTip="Your Kindle's email address" />
         <Control Id="lEmail" Type="Text" X="20" Y="110" Width="135" Height="13" Text="Email Address:" />
-        <Control Id="Email" Type="Edit" X="161" Y="110" Width="180" Height="15" Property="EMAIL" ToolTip="The sending email address"/>
+        <Control Id="Email" Type="Edit" X="161" Y="110" Width="180" Height="15" Property="EMAILADDRESS" ToolTip="The sending email address"/>
         <Control Id="lPassword" Type="Text" X="20" Y="130" Width="135" Height="13" Text="Email Address Password:" />
         <Control Id="Password" Type="Edit" Password="yes" X="161" Y="130" Width="180" Height="15" Property="PASSWORD" ToolTip="This will be encrypted" />        
         <Control Id="lCert" Type="Text" X="20" Y="150" Width="135" Height="13" Text="Select Certificate:" />
@@ -62,10 +62,10 @@
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
           <Condition Action="disable">
-            (SSLPORT = "") OR (HTTPPORT="") OR (CERT="")
+            (SSLPORT = "") OR (HTTPPORT="") 
           </Condition>
           <Condition Action="enable">
-            <![CDATA[(SSLPORT <> "") AND (HTTPPORT<>"") AND (CERT<>"")]]>
+            <![CDATA[(SSLPORT <> "") AND (HTTPPORT<>"") ]]>
           </Condition>
         </Control>
         <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back" />

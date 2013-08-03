@@ -39,7 +39,7 @@ namespace StoreAndConvert.WindowsService
 
                 host = new ServiceHost(typeof(StoreUrls));
 
-                AddServiceEndPoint(host, "https://{0}:{1}/storeurl", true, certSubjectName);
+                if (!string.IsNullOrEmpty(certSubjectName)) { AddServiceEndPoint(host, "https://{0}:{1}/storeurl", true, certSubjectName); }
                 AddServiceEndPoint(host, "http://{0}:{1}/storeurl", false);
 
                 host.Open();

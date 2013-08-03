@@ -3,7 +3,7 @@
   <Product Id="63C69432-ADC1-4A6E-9DF3-4D0CC57F505F"
            Name="Store and Convert"
            Language="1033"
-           Version="1.0.0.0" Manufacturer="Manyrootsofallevil inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
+           Version="1.0.0.0" Manufacturer="Manyrootsofallevil Inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -16,6 +16,10 @@
       <DirectorySearch Path="[FRAMEWORKBASEPATH]" Depth="4" Id="FindAspNetRegIis">
         <FileSearch Name="aspnet_regiis.exe" MinVersion="4.0.3"/>
       </DirectorySearch>
+    </Property>
+
+    <Property Id="EBOOKCONVERTER64">
+      <RegistrySearch Id="FindCalibre" Root="HKLM" Key="SOFTWARE\calibre 64bit\Installer"  Name="InstallPath" Type="raw" Win64="yes"/>
     </Property>
 
     <Property Id="SSLPORT" Value="31415"/>
@@ -47,31 +51,51 @@
       <UIRef Id="WixUI_ErrorProgressText" />
     </UI>
 
-  
+
     <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
       <Feature Id="Store" Title="Store" Level="1"  >
         <ComponentGroupRef Id="ProductComponents" />
         <ComponentGroupRef Id="Store" />
-        <!--<ComponentRef Id="dummyStore"/>-->
+        <ComponentRef Id="miscellaneous"/>
+       <!-- <ComponentRef Id="dummybackup"/>-->
       </Feature>
-      <Feature Id ="Convert" Title="Convert" Level="1">
+      <Feature Id ="Convert" Title="Convert" Level="2">
         <ComponentGroupRef Id="Convert" />
+      <Condition Level="1">EBOOKCONVERTER64</Condition>
       </Feature>
     </Feature>
-  
+
   </Product>
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
-    <!--  <Directory Id="AppDataFolder" Name="AppDataFolder">
-        <Directory Id="WebPages" Name="WebPages">
-          <Component Id="dummyStore" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
-            <File Id="sdss" Source="../Misc/bookmarklet.txt" KeyPath="yes"/>
-            <RemoveFolder Id="removeme" On="uninstall"/>
+      <Directory Id="AppDataFolder" Name="AppDataFolder">
+        <Directory Id="WebPages" Name="Store_n_Convert">
+          <Component Id="miscellaneous" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
+            <RegistryKey Root="HKCU"
+                                 Key="Software\Store_n_Convert">
+              <RegistryValue Value="Manyrootsofallevil Inc."
+                             Type="string"
+                             KeyPath="yes" />
+            </RegistryKey>
+            <File Id="bookmarklet" Source="../Misc/bookmarklet.txt" />
+            <File Id="recipe" Source="../Misc/localhost.recipe" Name="heisenbergs.recipe"/>
+            <RemoveFolder Id="removeme" Directory="WebPages" On="uninstall"/>
           </Component>
-          <Directory Id="Backup" Name="Backup"/>
-           
+          <!--<Directory Id="Backup" Name="Backup"/>
+           <Component Id="dummybackup" Guid="BBCDEF01-0124-0123-0123-4D0CC57F505F">
+                <RegistryKey Root="HKCU"
+                                     Key="Software\Store and Convert\Backup">
+                            <RegistryValue Value="Manyrootsofallevil Inc."
+                                           Type="string"
+                                           KeyPath="yes" />
+                        </RegistryKey>
+            -->
+          <!--<File Id="sdss" Source="../Misc/bookmarklet.txt" KeyPath="yes"/>-->
+          <!--
+            <RemoveFolder Id="removebackup" Directory="Backup" On="uninstall"/>
+          </Component>-->
         </Directory>
-      </Directory>-->
+      </Directory>
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="Store And Convert" />
       </Directory>
@@ -87,7 +111,7 @@
       </Component>
     </ComponentGroup>
   </Fragment>
-  
+
 
 
 </Wix>

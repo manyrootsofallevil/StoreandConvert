@@ -21,9 +21,9 @@ namespace ConvertHelper
 
             string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-            if (Directory.Exists(ConfigurationManager.AppSettings["imagespath"].Trim('\\')))
+            if (Directory.Exists(ConfigurationManager.AppSettings["imagesDirectory"].Trim('\\')))
             {
-                images = Directory.GetFiles(ConfigurationManager.AppSettings["imagespath"].Trim('\\'), "*.*", SearchOption.AllDirectories)
+                images = Directory.GetFiles(ConfigurationManager.AppSettings["imagesDirectory"].Trim('\\'), "*.*", SearchOption.AllDirectories)
                        .Where(x => x.EndsWith(".jpg") || x.EndsWith(".png") || x.EndsWith(".jpeg")).ToList();
             }
 

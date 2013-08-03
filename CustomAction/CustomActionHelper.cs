@@ -66,6 +66,33 @@ namespace CustomAction
             return true;
         }
 
+        internal static bool RemoveAcl(string user, string destinationDirectory, Session session)
+        {
+            session.Log("Begin RemoveACL. User: {0}. Directory: {1}", user, destinationDirectory);
+
+            bool result = false;
+
+            DirectoryInfo dirinfo = new DirectoryInfo(destinationDirectory);
+            DirectorySecurity dsec = dirinfo.GetAccessControl(AccessControlSections.All);
+
+            AuthorizationRuleCollection rules = dsec.GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount));
+
+            foreach (AccessRule rule in rules)
+            {
+                if (rule.IdentityReference.Value.Equals(user, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    bool value;
+                    dsec.PurgeAccessRules(rule.IdentityReference);
+                    dsec.ModifyAccessRule(AccessControlModification.RemoveAll, rule, out value);
+                    dirinfo.SetAccessControl(dsec);
+                    result = true;
+                    break;
+                }
+            }
+            session.Log("End RemoveACL.");
+            return result;
+        }
+
         internal static bool EncryptAppSettings(string destinationDirectory, string exeName)
         {
 
@@ -133,5 +160,7 @@ namespace CustomAction
                 i++;
             }
         }
+
+       
     }
 }

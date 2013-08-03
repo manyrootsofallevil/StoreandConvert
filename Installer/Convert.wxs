@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util ="http://schemas.microsoft.com/wix/UtilExtension">
   <Fragment>
     <DirectoryRef Id="INSTALLFOLDER">
       <Directory Id="dir39B22699688E51DCD8DCBB99A47E835B" Name="Convert" />
@@ -10,9 +11,36 @@
       <Component Id="cmpDF639867D0E3ACC56847C3D0FADAC620" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">
         <File Id="fil6106E04F8E30C7C6883360EF38CF5899" KeyPath="yes" Source="$(var.Convert.TargetDir)\Convert.exe" />
         <File Id="fil1B3C059B5F0CAE13A466A0641CE5FE34"  Source="$(var.Convert.TargetDir)\Convert.exe.config" />
+
+        <util:XmlFile Id="StoreDir"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='StoreDirectory'[\]]/@value"
+        Value="[INSTALLFOLDER]Webpages" Permanent="yes"  />
+
+        <util:XmlFile Id="BackDir"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='BackupDirectory'[\]]/@value"
+        Value="[INSTALLFOLDER]Webpages\Backup" Permanent="yes"  />
+
+        <util:XmlFile Id="ImagesDir"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='ImagesDirectory'[\]]/@value"
+        Value="[INSTALLFOLDER]Images" Permanent="yes"  />
+
+        <util:XmlFile Id="KindleEMail"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='ToEmail'[\]]/@value"
+        Value="[KINDLEEMAILADDRESS]" Permanent="yes"  />
+
+        <util:XmlFile Id="SourceEMail"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='FromEmail'[\]]/@value"
+        Value="[EMAILADDRESS]" Permanent="yes"  />
+
+        <util:XmlFile Id="SourceEMailPassword"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='Password'[\]]/@value"
+        Value="[PASSWORD]" Permanent="yes"  />
+
+        <util:XmlFile Id="newsrecipepath"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='newsrecipepath'[\]]/@value"
+        Value="[AppDataFolder]Store_n_Convert\heisenbergs.recipe" Permanent="yes"  />
+
+        <util:XmlFile Id="savefilepath"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='savefilepath'[\]]/@value"
+        Value="[INSTALLFOLDER]" Permanent="yes"  />
+
+        <util:XmlFile Id="ebookconverter"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='EbookConverter'[\]]/@value"
+        Value="[EBOOKCONVERTER64]ebook-converter.exe" Permanent="yes"  />
+
         <ServiceInstall DisplayName="Convert Urls to Periodical" Name="ConvertUrls" Description="Convert stored urls by the Store Urls service to ebook (mobi)"
                 Account="NT AUTHORITY\Network Service" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
-  
         <ServiceControl Id="ConvertUrlsControl" Name="ConvertUrls" Stop="both" Remove="uninstall"/>
       </Component>
       <Component Id="cmp0A8D64A2A28BD29C23AF74D9EB4F1B86" Directory="dir39B22699688E51DCD8DCBB99A47E835B" Guid="*">

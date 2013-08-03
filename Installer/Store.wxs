@@ -5,6 +5,9 @@
     <DirectoryRef Id="INSTALLFOLDER">
       <Directory Id="dir49B22699688E51DCD8DCBB99A47E835B" Name="Store" />
     </DirectoryRef>
+    <DirectoryRef Id="dir49B22699688E51DCD8DCBB99A47E835B">
+      <Directory Id="dir0111" Name="WebPages"/>
+    </DirectoryRef>
   </Fragment>
   <Fragment>
     <ComponentGroup Id="Store">
@@ -22,8 +25,8 @@
                  Value="[CERT]" Permanent="yes"  />
 
         <util:XmlFile Id="StoreDirectory"  File="[INSTALLFOLDER]Store\Store.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='StoreDirectory'[\]]/@value"
-                 Value="[AppDataFolder]Webpages\" Permanent="yes"  />
-        
+                 Value="[INSTALLFOLDER]Webpages" Permanent="yes"  />
+
         <!--<RemoveFolder Id="Webpages" On="uninstall" Directory=""/>-->
         <ServiceInstall DisplayName="Store Urls to File" Name="StoreUrls" Description="Store Urls for later conversion to ebook (mobi)"
                         Account="NT AUTHORITY\Network Service" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
