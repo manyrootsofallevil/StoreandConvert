@@ -4,7 +4,7 @@
            Name="Store and Convert"
            Language="1033"
            Version="1.0.0.0" Manufacturer="Manyrootsofallevil Inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  Platform="x64" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
@@ -35,8 +35,8 @@
     <InstallExecuteSequence>
       <!--These run on install-->
       <Custom Action="GiveWriteAccess" After="InstallFinalize">NOT Installed</Custom>
-      <Custom Action="EncryptConfigFile" After="GiveWriteAccess">NOT Installed</Custom>
-      <Custom Action="GrantAccessToConfig" After="EncryptConfigFile">NOT Installed</Custom>
+      <!--<Custom Action="EncryptConfigFile" After="GiveWriteAccess">NOT Installed</Custom>
+      <Custom Action="GrantAccessToConfig" After="EncryptConfigFile">NOT Installed</Custom>-->
 
       <!--this runs on uninstall-->
       <Custom Action="RemoveAccessToConfig" After="InstallFinalize">Installed</Custom>
@@ -53,15 +53,16 @@
 
 
     <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
-      <Feature Id="Store" Title="Store" Level="1"  >
-        <ComponentGroupRef Id="ProductComponents" />
+      <Feature Id="Store" Title="Store" Level="1"  >       
         <ComponentGroupRef Id="Store" />
         <ComponentRef Id="miscellaneous"/>
-       <!-- <ComponentRef Id="dummybackup"/>-->
+        <ComponentRef Id="emptyweb"/>
+        <ComponentRef Id="emptybackup"/>
+        <!-- <ComponentRef Id="dummybackup"/>-->
       </Feature>
       <Feature Id ="Convert" Title="Convert" Level="2">
         <ComponentGroupRef Id="Convert" />
-      <Condition Level="1">EBOOKCONVERTER64</Condition>
+        <Condition Level="1">EBOOKCONVERTER64</Condition>
       </Feature>
     </Feature>
 
@@ -69,7 +70,7 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder" Name="AppDataFolder">
-        <Directory Id="WebPages" Name="Store_n_Convert">
+        <Directory Id="Store_n_Convert" Name="Store_n_Convert">
           <Component Id="miscellaneous" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
             <RegistryKey Root="HKCU"
                                  Key="Software\Store_n_Convert">
@@ -79,7 +80,7 @@
             </RegistryKey>
             <File Id="bookmarklet" Source="../Misc/bookmarklet.txt" />
             <File Id="recipe" Source="../Misc/localhost.recipe" Name="heisenbergs.recipe"/>
-            <RemoveFolder Id="removeme" Directory="WebPages" On="uninstall"/>
+            <RemoveFolder Id="removeme" On="uninstall"/>
           </Component>
           <!--<Directory Id="Backup" Name="Backup"/>
            <Component Id="dummybackup" Guid="BBCDEF01-0124-0123-0123-4D0CC57F505F">
@@ -97,20 +98,35 @@
         </Directory>
       </Directory>
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="Store And Convert" />
+        <Directory Id="INSTALLFOLDER" Name="Store And Convert" >
+        <Directory Id="WebPages" Name="WebPages">
+          <Component Id="emptyweb" Guid="AAAAAAAA-4884-4A01-AA04-84B92D222428"
+        SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
+        Win64="no" Location="either" >
+            <CreateFolder/>
+          </Component>
+        <Directory Id="Backup" Name="Backup">
+          <Component Id="emptybackup" Guid="BAAAAAAA-4884-4A01-AA04-84B92D222428" 
+        SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
+        Win64="no" Location="either">
+            <CreateFolder/>
+          </Component>
+        </Directory>
+        </Directory>
+        </Directory>
       </Directory>
     </Directory>
   </Fragment>
 
-  <Fragment>
+  <!--<Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      --><!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. --><!--
       <Component Id="ProductComponent">
-        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        --><!-- TODO: Insert files, registry keys, and other resources here. --><!--
         <File Id="sdsds" Source="../Misc/bookmarklet.txt"/>
       </Component>
     </ComponentGroup>
-  </Fragment>
+  </Fragment>-->
 
 
 

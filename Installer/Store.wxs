@@ -5,16 +5,17 @@
     <DirectoryRef Id="INSTALLFOLDER">
       <Directory Id="dir49B22699688E51DCD8DCBB99A47E835B" Name="Store" />
     </DirectoryRef>
-    <DirectoryRef Id="dir49B22699688E51DCD8DCBB99A47E835B">
+    <!--<DirectoryRef Id="dir49B22699688E51DCD8DCBB99A47E835B">
       <Directory Id="dir0111" Name="WebPages"/>
-    </DirectoryRef>
+    </DirectoryRef>-->
   </Fragment>
   <Fragment>
     <ComponentGroup Id="Store">
       <Component Id="cmp8312B8FE07099985E4D7D29729F992C2" Directory="dir49B22699688E51DCD8DCBB99A47E835B" Guid="*">
+
         <File Id="fil9EA951DEEF8E32A9F66527455DA3C55F" KeyPath="yes" Source="$(var.Store.TargetDir)\Store.exe" />
         <File Id="fil3A01202C0345E42107E335FDD0FF6986" Source="$(var.Store.TargetDir)\Store.exe.config" />
-
+        
         <util:XmlFile Id="SSLPORT"  File="[INSTALLFOLDER]Store\Store.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='SSLPort'[\]]/@value"
                  Value="[SSLPORT]" Permanent="yes"  />
 
@@ -42,6 +43,9 @@
       <Component Id="cmp7389FF5869B5D0D9DDF2291902D8ADF2" Directory="dir49B22699688E51DCD8DCBB99A47E835B" Guid="*">
         <File Id="fil93F8C163A1D1B3CD9A58E51B5AC2F680" KeyPath="yes" Source="$(var.Store.TargetDir)\WcfJsonRestService.dll" />
       </Component>
+      <!--<Component Id="empty" Directory="dir49B22699688E51DCD8DCBB99A47E835B" Guid="ABCD1234-1234-4567-890A-DEADBEEFDEAF">
+        
+      </Component>-->
     </ComponentGroup>
   </Fragment>
 </Wix>

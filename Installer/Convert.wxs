@@ -27,7 +27,7 @@
         <util:XmlFile Id="SourceEMail"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='FromEmail'[\]]/@value"
         Value="[EMAILADDRESS]" Permanent="yes"  />
 
-        <util:XmlFile Id="SourceEMailPassword"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='Password'[\]]/@value"
+        <util:XmlFile Id="SourceEMailPassword"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='password'[\]]/@value"
         Value="[PASSWORD]" Permanent="yes"  />
 
         <util:XmlFile Id="newsrecipepath"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='newsrecipepath'[\]]/@value"
