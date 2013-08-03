@@ -1,0 +1,7 @@
+class BasicUserRecipe1363023559(AutomaticNewsRecipe):
+    title          = u'Custom'
+    oldest_article = 7
+    max_articles_per_feed = 100
+    auto_cleanup = True
+
+    feeds          = [(u'hhhh', u'http://localhost:8000/BlogService/GetBlog')]

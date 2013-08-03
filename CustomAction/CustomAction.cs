@@ -14,6 +14,28 @@ namespace CustomAction
         static string user = @"NT AUTHORITY\Network Service";
 
         [CustomAction]
+        public static ActionResult CheckElevated(Session session)
+        {
+            ActionResult result = ActionResult.Failure;
+
+            session.Log("Begin CheckElevated");
+
+            if (CustomActionHelper.CheckRunAsAdministrator())
+            {
+                result = ActionResult.Success;
+            }
+            else
+            {
+                session.Log("Not running with elevated permissions.STOP");
+                session.DoAction("NotElevated");
+            }
+
+            session.Log("End CheckElevated");
+
+            return result;
+        }
+
+        [CustomAction]
         public static ActionResult GiveWriteAccess(Session session)
         {
             ActionResult result = ActionResult.Failure;
@@ -21,9 +43,23 @@ namespace CustomAction
             // Debugger.Launch();
             session.Log("Begin GiveWriteAccess");
 
-            results = CustomActionHelper.SetAcl(user, Path.Combine(session["AppDataFolder"], "WebPages"), session);
+            result = CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
+                ? ActionResult.Success : ActionResult.Failure;
 
-            result = results && CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
+            session.Log("End GiveWriteAccess");
+
+            return result;
+        }
+
+        [CustomAction]
+        public static ActionResult RemoveWriteAccess(Session session)
+        {
+            ActionResult result = ActionResult.Failure;
+            bool results = false;
+            // Debugger.Launch();
+            session.Log("Begin GiveWriteAccess");
+
+            result = CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
                 ? ActionResult.Success : ActionResult.Failure;
 
             session.Log("End GiveWriteAccess");
@@ -71,7 +107,21 @@ namespace CustomAction
 
         }
 
+        [CustomAction]
+        public static ActionResult SetCertThumprint(Session session)
+        {
+            ActionResult result = ActionResult.Failure;
 
+            session.Log("Start SetCertThumprint");
+
+            session["CERTTHUMBPRINT"] = CustomActionHelper.GetCertificateThumbprint(session["CERT"], session);
+
+            result = ActionResult.Success;
+
+            session.Log("End SetCertThumprint");
+
+            return result;
+        }
     }
 
 }

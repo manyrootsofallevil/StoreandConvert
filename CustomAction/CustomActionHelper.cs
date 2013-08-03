@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -161,6 +162,34 @@ namespace CustomAction
             }
         }
 
-       
+        internal static string GetCertificateThumbprint( string subjectName, Session session)
+        {
+            session.Log("Begin GetCertificateThumbprint. SubjectName: {0}.", subjectName);
+
+            string result = string.Empty;
+
+            subjectName = string.Format("CN={0}",subjectName);
+
+            X509Store store = new X509Store("My", StoreLocation.LocalMachine);
+
+            store.Open(OpenFlags.ReadOnly);
+
+            var cert = store.Certificates.Cast<X509Certificate2>()
+                .Where(x => x.SubjectName.Name.Equals(subjectName, StringComparison.InvariantCultureIgnoreCase))
+                .FirstOrDefault();
+
+            result = cert.Thumbprint;
+
+            session.Log("End GetCertificateThumbprint. SubjectName: {0} ThumbPrint: {1}", subjectName, result);
+
+            return result;
+        }
+
+        internal static bool CheckRunAsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
     }
 }
