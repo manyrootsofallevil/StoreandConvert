@@ -25,24 +25,44 @@
     <Property Id="SSLPORT" Value="31415"/>
     <Property Id="HTTPPORT" Value="27182"/>
 
+    <Property Id="CERTTHUMBPRINT"/>
+
     <Binary Id="CA" SourceFile="$(var.CustomAction.TargetDir)CustomAction.CA.dll"/>
+
+    <CustomAction Id="CheckElevated" BinaryKey="CA" DllEntry="CheckElevated" Execute="immediate" Return="check"/>
     <CustomAction Id="GetInstalledCertificates" BinaryKey="CA" DllEntry="GetInstalledCertificates" Execute="immediate" Return="ignore"/>
-    <CustomAction Id="GiveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" />
+    <CustomAction Id="GiveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" Return="check"/>
+    <CustomAction Id="RemoveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" Return="check"/>
     <CustomAction Id="EncryptConfigFile" BinaryKey="CA" DllEntry="EncryptConfigFile" Execute="immediate" />
+    <CustomAction Id="SetCertThumprint" BinaryKey="CA" DllEntry="SetCertThumprint" Execute="immediate" Return="check"/>
+
+    <CustomAction Id="NotElevated" Error="Ensure that the Installer is Run with elevated permissions (i.e. Run as Administrator)" />
+
     <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
+    <CustomAction Id="AddSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=https://*:[SSLPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check"/>
+    <CustomAction Id="AddHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://*:[HTTPPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check"/>
+    <CustomAction Id="AddSSL" Directory="INSTALLFOLDER" ExeCommand="netsh http add sslcert ipport=0.0.0.0:[SSLPORT] certhash=[CERTTHUMBPRINT] appid=&quot;{FEEDDECAF-DEAD-1BED-DEAF-01BEEFDECADE}&quot;"  Return="check"/>
+
     <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
 
     <InstallExecuteSequence>
       <!--These run on install-->
+      <Custom Action="AddHTTPURLACL" After="InstallFinalize">NOT Installed</Custom>
+      <Custom Action="AddSSLURLACL" After="InstallFinalize">NOT Installed and CERT</Custom>
+      <Custom Action="SetCertThumprint" After="InstallFinalize">NOT Installed and CERT</Custom>
+      <Custom Action="AddSSL" After="SetCertThumprint">NOT Installed and CERT</Custom>
+
       <Custom Action="GiveWriteAccess" After="InstallFinalize">NOT Installed</Custom>
-      <!--<Custom Action="EncryptConfigFile" After="GiveWriteAccess">NOT Installed</Custom>
-      <Custom Action="GrantAccessToConfig" After="EncryptConfigFile">NOT Installed</Custom>-->
+      <Custom Action="EncryptConfigFile" After="GiveWriteAccess">NOT Installed</Custom>
+      <Custom Action="GrantAccessToConfig" After="EncryptConfigFile">NOT Installed</Custom>
 
       <!--this runs on uninstall-->
-      <Custom Action="RemoveAccessToConfig" After="InstallFinalize">Installed</Custom>
+      <Custom Action="RemoveAccessToConfig" After="CostFinalize">Installed</Custom>
+      <Custom Action="RemoveWriteAccess" After="RemoveAccessToConfig">Installed</Custom>
     </InstallExecuteSequence>
 
     <InstallUISequence>
+      <Custom Action="CheckElevated" After="CostFinalize" Overridable="yes"></Custom>
       <Custom Action="GetInstalledCertificates" After="CostFinalize" Overridable="yes">NOT Installed</Custom>
     </InstallUISequence>
 
@@ -53,12 +73,11 @@
 
 
     <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
-      <Feature Id="Store" Title="Store" Level="1"  >       
+      <Feature Id="Store" Title="Store" Level="1"  >
         <ComponentGroupRef Id="Store" />
         <ComponentRef Id="miscellaneous"/>
         <ComponentRef Id="emptyweb"/>
         <ComponentRef Id="emptybackup"/>
-        <!-- <ComponentRef Id="dummybackup"/>-->
       </Feature>
       <Feature Id ="Convert" Title="Convert" Level="2">
         <ComponentGroupRef Id="Convert" />
@@ -82,54 +101,28 @@
             <File Id="recipe" Source="../Misc/localhost.recipe" Name="heisenbergs.recipe"/>
             <RemoveFolder Id="removeme" On="uninstall"/>
           </Component>
-          <!--<Directory Id="Backup" Name="Backup"/>
-           <Component Id="dummybackup" Guid="BBCDEF01-0124-0123-0123-4D0CC57F505F">
-                <RegistryKey Root="HKCU"
-                                     Key="Software\Store and Convert\Backup">
-                            <RegistryValue Value="Manyrootsofallevil Inc."
-                                           Type="string"
-                                           KeyPath="yes" />
-                        </RegistryKey>
-            -->
-          <!--<File Id="sdss" Source="../Misc/bookmarklet.txt" KeyPath="yes"/>-->
-          <!--
-            <RemoveFolder Id="removebackup" Directory="Backup" On="uninstall"/>
-          </Component>-->
         </Directory>
       </Directory>
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="Store And Convert" >
-        <Directory Id="WebPages" Name="WebPages">
-          <Component Id="emptyweb" Guid="AAAAAAAA-4884-4A01-AA04-84B92D222428"
-        SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
-        Win64="no" Location="either" >
-            <CreateFolder/>
-          </Component>
-        <Directory Id="Backup" Name="Backup">
-          <Component Id="emptybackup" Guid="BAAAAAAA-4884-4A01-AA04-84B92D222428" 
-        SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
-        Win64="no" Location="either">
-            <CreateFolder/>
-          </Component>
-        </Directory>
-        </Directory>
+          <Directory Id="WebPages" Name="WebPages">
+            <Component Id="emptyweb" Guid="AAAAAAAA-4884-4A01-AA04-84B92D222428"
+          SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
+          Win64="no" Location="either" >
+              <CreateFolder/>
+            </Component>
+            <Directory Id="Backup" Name="Backup">
+              <Component Id="emptybackup" Guid="BAAAAAAA-4884-4A01-AA04-84B92D222428"
+            SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
+            Win64="no" Location="either">
+                <CreateFolder/>
+              </Component>
+            </Directory>
+          </Directory>
         </Directory>
       </Directory>
     </Directory>
   </Fragment>
-
-  <!--<Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      --><!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. --><!--
-      <Component Id="ProductComponent">
-        --><!-- TODO: Insert files, registry keys, and other resources here. --><!--
-        <File Id="sdsds" Source="../Misc/bookmarklet.txt"/>
-      </Component>
-    </ComponentGroup>
-  </Fragment>-->
-
-
-
 </Wix>
 
 <!--Things that need thinking about:
