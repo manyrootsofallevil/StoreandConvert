@@ -35,21 +35,26 @@
     <CustomAction Id="RemoveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" Return="check"/>
     <CustomAction Id="EncryptConfigFile" BinaryKey="CA" DllEntry="EncryptConfigFile" Execute="immediate" />
     <CustomAction Id="SetCertThumprint" BinaryKey="CA" DllEntry="SetCertThumprint" Execute="immediate" Return="check"/>
+    
+    <CustomAction Id="NetSH" BinaryKey="CA" DllEntry="NetSH" Execute="immediate" Return="check"/>
 
     <CustomAction Id="NotElevated" Error="Ensure that the Installer is Run with elevated permissions (i.e. Run as Administrator)" />
 
     <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
-    <CustomAction Id="AddSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=https://*:[SSLPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check"/>
-    <CustomAction Id="AddHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://*:[HTTPPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check"/>
-    <CustomAction Id="AddSSL" Directory="INSTALLFOLDER" ExeCommand="netsh http add sslcert ipport=0.0.0.0:[SSLPORT] certhash=[CERTTHUMBPRINT] appid=&quot;{FEEDDECAF-DEAD-1BED-DEAF-01BEEFDECADE}&quot;"  Return="check"/>
+    <CustomAction Id="AddSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=https://*:[SSLPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no" />
+    <CustomAction Id="AddHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://*:[HTTPPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
+    <CustomAction Id="AddSSL" Directory="INSTALLFOLDER" ExeCommand="netsh http add sslcert ipport=0.0.0.0:[SSLPORT] certhash=[CERTTHUMBPRINT] appid=&quot;{001DECAF-DEAD-1BED-DEAF-01BEEFDECADE}&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
 
     <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
+    <CustomAction Id="REmoveSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http del urlacl url=https://*:[SSLPORT]/Storeurl"  Return="ignore" Impersonate="no"/>
+    <CustomAction Id="REmoveHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http del urlacl url=http://*:[HTTPPORT]/Storeurl"  Return="ignore" Impersonate="no"/>
+    <CustomAction Id="REmoveSSLPortReservation" Directory="INSTALLFOLDER" ExeCommand="netsh http del sslcert ipport=0.0.0.0:[SSLPORT]"  Return="ignore" Impersonate="no"/>
 
     <InstallExecuteSequence>
       <!--These run on install-->
-      <Custom Action="AddHTTPURLACL" After="InstallFinalize">NOT Installed</Custom>
-      <Custom Action="AddSSLURLACL" After="InstallFinalize">NOT Installed and CERT</Custom>
-      <Custom Action="SetCertThumprint" After="InstallFinalize">NOT Installed and CERT</Custom>
+      <Custom Action="AddHTTPURLACL" Before="InstallFinalize">NOT Installed</Custom>
+      <Custom Action="AddSSLURLACL" Before="InstallFinalize">NOT Installed and CERT</Custom>
+      <Custom Action="SetCertThumprint" Before="InstallFinalize">NOT Installed and CERT</Custom>
       <Custom Action="AddSSL" After="SetCertThumprint">NOT Installed and CERT</Custom>
 
       <Custom Action="GiveWriteAccess" After="InstallFinalize">NOT Installed</Custom>
@@ -58,7 +63,11 @@
 
       <!--this runs on uninstall-->
       <Custom Action="RemoveAccessToConfig" After="CostFinalize">Installed</Custom>
-      <Custom Action="RemoveWriteAccess" After="RemoveAccessToConfig">Installed</Custom>
+      <Custom Action="RemoveWriteAccess" After="CostFinalize">Installed</Custom>
+      <Custom Action="NetSH" After="InstallFinalize">Installed</Custom>
+      <!--<Custom Action="REmoveSSLURLACL" After="InstallFinalize">Installed</Custom>
+      <Custom Action="REmoveHTTPURLACL" After="InstallFinalize">Installed</Custom>
+      <Custom Action="REmoveSSLPortReservation" After="InstallFinalize">Installed</Custom>-->
     </InstallExecuteSequence>
 
     <InstallUISequence>

@@ -191,5 +191,19 @@ namespace CustomAction
             var principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
+
+        internal static string StartProcess(string arg)
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = "netsh.exe";
+            p.StartInfo.Arguments = arg;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.Start();
+
+            string result = p.StandardOutput.ReadToEnd();
+
+            return result;
+        }
     }
 }

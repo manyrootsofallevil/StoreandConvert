@@ -122,6 +122,27 @@ namespace CustomAction
 
             return result;
         }
+
+        [CustomAction]
+        public static ActionResult NetSH(Session session)
+        {//I realize that this is suboptimal but could not get the removal working through standard wix custom actions.
+            ActionResult result = ActionResult.Failure;
+
+            session.Log("Start SH");
+
+            session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del sslcert ipport=0.0.0.0:{0}", session["SSLPORT"])));
+            session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=https://*:{0}/Storeurl", session["SSLPORT"])));
+            session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=http://*:{0}/Storeurl", session["HTTPPORT"])));
+            
+            result = ActionResult.Success;
+
+            session.Log("End SH");
+
+            return result;
+
+        }
+
+
     }
 
 }
