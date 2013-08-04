@@ -31,7 +31,7 @@
         Value="[PASSWORD]" Permanent="yes"  />
 
         <util:XmlFile Id="newsrecipepath"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='newsrecipepath'[\]]/@value"
-        Value="[AppDataFolder]Store_n_Convert\heisenbergs.recipe" Permanent="yes"  />
+        Value="[AppDataFolder]calibre\custom_recipes\heisenbergs.recipe" Permanent="yes"  />
 
         <util:XmlFile Id="rsssource"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='rsssource'[\]]/@value"
         Value="[TempFolder]rss.xml" Permanent="yes"  />

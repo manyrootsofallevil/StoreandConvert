@@ -147,6 +147,24 @@ namespace CustomAction
 
         }
 
+        [CustomAction]
+        public static ActionResult SetCustomRecipesPath(Session session)
+        {
+            ActionResult result = ActionResult.Failure;
+
+            session.Log("Start SetCustomRecipesPath");
+
+            session["CUSTOMRECIPES"] = string.Format(@"{0}calibre\custom_recipes\", session["AppDataFolder"]);
+
+            session.Log("CUSTOMRECIPES set to {0}", session["CUSTOMRECIPES"]);
+
+            result = ActionResult.Success;
+            
+            session.Log("End SetCustomRecipesPath");
+
+            return result;
+        }
+
     }
 
 }

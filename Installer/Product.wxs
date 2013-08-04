@@ -22,6 +22,8 @@
       <RegistrySearch Id="FindCalibre" Root="HKLM" Key="SOFTWARE\calibre 64bit\Installer"  Name="InstallPath" Type="raw" Win64="yes"/>
     </Property>
 
+    <Property Id="CUSTOMRECIPES"/>
+
     <Property Id="SSLPORT" Value="31415"/>
     <Property Id="HTTPPORT" Value="27182"/>
 
@@ -35,7 +37,9 @@
     <CustomAction Id="RemoveWriteAccess" BinaryKey="CA" DllEntry="GiveWriteAccess" Execute="immediate" Return="check"/>
     <CustomAction Id="EncryptConfigFile" BinaryKey="CA" DllEntry="EncryptConfigFile" Execute="immediate" />
     <CustomAction Id="SetCertThumprint" BinaryKey="CA" DllEntry="SetCertThumprint" Execute="immediate" Return="check"/>
+    <CustomAction Id="SetCustomRecipesPath" BinaryKey="CA" DllEntry="SetCustomRecipesPath" Execute="immediate" Return="check"/>
     
+
     <CustomAction Id="NetSH" BinaryKey="CA" DllEntry="NetSH" Execute="immediate" Return="check"/>
 
     <CustomAction Id="NotElevated" Error="Ensure that the Installer is Run with elevated permissions (i.e. Run as Administrator)" />
@@ -74,6 +78,7 @@
 
     <InstallUISequence>
       <Custom Action="CheckElevated" After="CostFinalize" Overridable="yes"></Custom>
+      <Custom Action="SetCustomRecipesPath" After="CostFinalize" Overridable="yes"></Custom>
       <Custom Action="GetInstalledCertificates" After="CostFinalize" Overridable="yes">NOT Installed</Custom>
     </InstallUISequence>
 
@@ -86,7 +91,7 @@
     <Feature Id="All" Title="Store and Convert" Level="1" ConfigurableDirectory="INSTALLFOLDER">
       <Feature Id="Store" Title="Store" Level="1"  >
         <ComponentGroupRef Id="Store" />
-        <ComponentRef Id="miscellaneous"/>
+        <ComponentRef Id="MiscComp"/>
         <ComponentRef Id="emptyweb"/>
         <ComponentRef Id="emptybackup"/>
       </Feature>
@@ -99,23 +104,33 @@
   </Product>
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="AppDataFolder" Name="AppDataFolder">
-        <Directory Id="Store_n_Convert" Name="Store_n_Convert">
-          <Component Id="miscellaneous" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
-            <RegistryKey Root="HKCU"
-                                 Key="Software\Store_n_Convert">
-              <RegistryValue Value="Manyrootsofallevil Inc."
-                             Type="string"
-                             KeyPath="yes" />
-            </RegistryKey>
-            <File Id="bookmarklet" Source="../Misc/bookmarklet.txt" />
-            <File Id="recipe" Source="../Misc/localhost.recipe" Name="heisenbergs.recipe"/>
-            <RemoveFolder Id="removeme" On="uninstall"/>
-          </Component>
+      <!--<Directory Id="AppDataFolder" Name="AppDataFolder">
+        <Directory Id="Store_n_Convert" Name="Calibre">
+          <Directory Id="Custom_recipes" Name="custom_Recipes">
+            <Component Id="miscellaneous" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
+              <RegistryKey Root="HKCU"
+                                   Key="Software\Store_n_Convert">
+                <RegistryValue Value="Manyrootsofallevil Inc."
+                               Type="string"
+                               KeyPath="yes" />
+              </RegistryKey>
+              <File Id="bookmarklet" Source="../Misc/bookmarklet.txt" />
+              <File Id="recipe" Source="../Misc/localhost.recipe" Name="heisenbergs.recipe"/>
+              <RemoveFolder Id="removeme" On="uninstall"/>
+            </Component>
+          </Directory>
         </Directory>
-      </Directory>
+      </Directory>-->
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="Store And Convert" >
+          <Directory Id="MiscDir" Name="Misc">
+            <Component Id="MiscComp" Guid="ABCDEF01-0124-0123-0123-4D0CC57F505F">
+              <File Id="bookmarklet" Source="../Misc/bookmarklet.txt" />
+              <File Id="recipe" Source="../Misc/localhost.recipe" Name="heisenbergs.recipe" KeyPath="yes">
+                <CopyFile Id="copyme" DestinationProperty="CUSTOMRECIPES"/>
+              </File>
+            </Component>
+          </Directory>
           <Directory Id="WebPages" Name="WebPages">
             <Component Id="emptyweb" Guid="AAAAAAAA-4884-4A01-AA04-84B92D222428"
           SharedDllRefCount="no" KeyPath="yes" NeverOverwrite="no" Permanent="no" Transitive="no"
