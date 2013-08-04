@@ -161,6 +161,7 @@ Launch html page on successful install
 Improve logging
 Move log files to temp directory
 Tidy up code.
+It would be nice if it handled other email providers not just outlook
 
 -->
 
