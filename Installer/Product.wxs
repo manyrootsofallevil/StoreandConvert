@@ -43,6 +43,7 @@
     <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
     <CustomAction Id="AddSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=https://*:[SSLPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no" />
     <CustomAction Id="AddHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://+:[HTTPPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
+    <CustomAction Id="AddfeedURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://+:8000/BlogService user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
     <CustomAction Id="AddSSL" Directory="INSTALLFOLDER" ExeCommand="netsh http add sslcert ipport=0.0.0.0:[SSLPORT] certhash=[CERTTHUMBPRINT] appid=&quot;{001DECAF-DEAD-1BED-DEAF-01BEEFDECADE}&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
 
     <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
@@ -53,6 +54,7 @@
     <InstallExecuteSequence>
       <!--These run on install-->
       <Custom Action="AddHTTPURLACL" Before="InstallFinalize">NOT Installed</Custom>
+      <Custom Action="AddfeedURLACL" Before="InstallFinalize">NOT Installed</Custom>
       <Custom Action="AddSSLURLACL" Before="InstallFinalize">NOT Installed and CERT</Custom>
       <Custom Action="SetCertThumprint" Before="InstallFinalize">NOT Installed and CERT</Custom>
       <Custom Action="AddSSL" After="SetCertThumprint">NOT Installed and CERT</Custom>

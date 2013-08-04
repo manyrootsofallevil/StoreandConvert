@@ -194,14 +194,15 @@ namespace CustomAction
 
         internal static string StartProcess(string arg)
         {
-            Process p = new Process();
-            p.StartInfo.FileName = "netsh.exe";
-            p.StartInfo.Arguments = arg;
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.Start();
+            Process process = new Process();
+            process.StartInfo.FileName = "netsh.exe";
+            process.StartInfo.Arguments = arg;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
 
-            string result = p.StandardOutput.ReadToEnd();
+            string result = process.StandardOutput.ReadToEnd();
 
             return result;
         }

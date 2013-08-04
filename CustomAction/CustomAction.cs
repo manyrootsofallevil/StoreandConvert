@@ -137,6 +137,7 @@ namespace CustomAction
             session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del sslcert ipport=0.0.0.0:{0}", session["SSLPORT"])));
             session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=https://*:{0}/Storeurl", session["SSLPORT"])));
             session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=http://+:{0}/Storeurl", session["HTTPPORT"])));
+            session.Log("{0}", CustomActionHelper.StartProcess("http del urlacl url=http://+:8000/BlogService"));
             
             result = ActionResult.Success;
 
