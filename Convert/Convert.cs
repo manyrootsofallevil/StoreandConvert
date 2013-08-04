@@ -52,7 +52,9 @@ namespace Convert
             {
                 ticker.Enabled = false;
 
-                Host.Start();
+                RssFeedHost host = new RssFeedHost();
+
+                host.Start();
 
                 List<HTMLPage> webPages = FileHandler.GetFiles(ConfigurationManager.AppSettings["StoreDirectory"]);
 
@@ -64,7 +66,7 @@ namespace Convert
 
                 nextRunTime = SetNextRunTime();
 
-                Host.Stop();
+                host.Stop();
 
                 ticker.Enabled = true;
             }
@@ -102,50 +104,6 @@ namespace Convert
             return runTime;
 
         }
-
-        //private void ConvertUsingExternalTool()
-        //{
-        //    bool completedConversion;
-
-        //    string saveFileName = string.Format(@"{0}\{1}", ConfigurationManager.AppSettings["savefilepath"].Trim('\\'),
-        //        string.Format(ConfigurationManager.AppSettings["OutputFileNamePattern"], DateTime.Now));
-
-        //    string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-        //    List<string> images = Directory.GetFiles(ConfigurationManager.AppSettings["imagespath"].Trim('\\'),"*.*",SearchOption.AllDirectories)
-        //        .Where(x => x.EndsWith(".jpg") || x.EndsWith(".png") || x.EndsWith(".jpeg")).ToList();
-
-        //    if (images.Count > 0)
-        //    {
-        //        Random rng = new Random();
-
-        //        ImageModifier image = new ImageModifier(images[rng.Next(0, images.Count)]);
-
-        //        image.WriteMessageToImage(Path.GetFileNameWithoutExtension(saveFileName), DateTime.Now.ToLongDateString(),
-        //            string.Format(@"{0}\frontpage.jpg", exePath.Trim('\\')));
-
-        //        completedConversion = RunExternalApplication.RunExternalApp(AppType.EbookConverter,
-        //               string.Format("{0} \"{1}\" --authors {2} --title {3} --cover {4}",
-        //               ConfigurationManager.AppSettings["newsrecipepath"], saveFileName,
-        //               ConfigurationManager.AppSettings["author"], DateTime.Now.ToString("\"dd-MMM-yyyy\""),
-        //                string.Format("\"{0}\\frontpage.jpg\"", exePath.Trim('\\'))));
-        //    }
-        //    else
-        //    {
-        //        completedConversion = RunExternalApplication.RunExternalApp(AppType.EbookConverter,
-        //               string.Format("{0} \"{1}\" --authors {2} --title {3}",
-        //               ConfigurationManager.AppSettings["newsrecipepath"], saveFileName,
-        //               ConfigurationManager.AppSettings["author"], DateTime.Now.ToString("\"dd-MMM-yyyy\"")));
-        //    }
-
-        //    if (completedConversion)
-        //    {
-        //        Emailer.Hotmail(string.Format("{0}", saveFileName));
-
-        //        Trace.TraceInformation("Converted book can be found here {0}{1}.mobi",
-        //             ConfigurationManager.AppSettings["savefilepath"], DateTime.Now.ToString("yyyyMMdd"));
-        //    }
-        //}
 
     }
 }
