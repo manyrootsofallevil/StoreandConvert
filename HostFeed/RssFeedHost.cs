@@ -16,8 +16,8 @@ namespace HostFeed
     public class RssFeedHost
     {
         static Uri baseAddress = new Uri("http://localhost:8000/BlogService");
-        static WebServiceHost svcHost = new WebServiceHost(typeof(BlogService), baseAddress);
-        static bool opened = false;
+        WebServiceHost svcHost = new WebServiceHost(typeof(BlogService), baseAddress);
+        bool opened = false;
 
         public void Start()
         {
