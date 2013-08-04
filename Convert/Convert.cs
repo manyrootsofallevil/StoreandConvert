@@ -29,10 +29,9 @@ namespace Convert
         {
 #if DEBUG
             Debugger.Launch();
-            ticker.Interval = 10000;
+            ticker.Interval = 3000;
 #endif
             //TODO: No idea why this is not working first time, so leaving it here as a backup.
-            //Use .\aspnet_regiis.exe -pef appSettings <app directory path> instead post install.
             EncryptAppConfig.EncryptAppSettings();
 
             nextRunTime = GetNextRunTime();
