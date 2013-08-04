@@ -57,7 +57,7 @@ namespace ConvertHelper
                 foreach (string file in files)
                 {
                     currentFile = file;
-                    File.Move(file, string.Format("{0}{1}_processed{2}", 
+                    File.Move(file, string.Format("{0}\\{1}_processed{2}", 
                         destPath, Path.GetFileNameWithoutExtension(file), Path.GetExtension(file)));
                 }
             }
