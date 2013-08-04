@@ -42,12 +42,12 @@
 
     <CustomAction Id="GrantAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pa NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
     <CustomAction Id="AddSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=https://*:[SSLPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no" />
-    <CustomAction Id="AddHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://*:[HTTPPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
+    <CustomAction Id="AddHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http add urlacl url=http://+:[HTTPPORT]/Storeurl user=&quot;NT Authority\Network Service&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
     <CustomAction Id="AddSSL" Directory="INSTALLFOLDER" ExeCommand="netsh http add sslcert ipport=0.0.0.0:[SSLPORT] certhash=[CERTTHUMBPRINT] appid=&quot;{001DECAF-DEAD-1BED-DEAF-01BEEFDECADE}&quot;"  Return="check" Execute="deferred" Impersonate="no"/>
 
     <CustomAction Id="RemoveAccessToConfig" Directory="INSTALLFOLDER" ExeCommand="[ASPNETREGIIS] -pr NetFrameWorkConfigurationKey &quot;NT Authority\Network Service&quot;"  Return="check"/>
     <CustomAction Id="REmoveSSLURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http del urlacl url=https://*:[SSLPORT]/Storeurl"  Return="ignore" Impersonate="no"/>
-    <CustomAction Id="REmoveHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http del urlacl url=http://*:[HTTPPORT]/Storeurl"  Return="ignore" Impersonate="no"/>
+    <CustomAction Id="REmoveHTTPURLACL" Directory="INSTALLFOLDER" ExeCommand="netsh http del urlacl url=http://+:[HTTPPORT]/Storeurl"  Return="ignore" Impersonate="no"/>
     <CustomAction Id="REmoveSSLPortReservation" Directory="INSTALLFOLDER" ExeCommand="netsh http del sslcert ipport=0.0.0.0:[SSLPORT]"  Return="ignore" Impersonate="no"/>
 
     <InstallExecuteSequence>
@@ -88,7 +88,7 @@
         <ComponentRef Id="emptyweb"/>
         <ComponentRef Id="emptybackup"/>
       </Feature>
-      <Feature Id ="Convert" Title="Convert" Level="2">
+      <Feature Id ="Convert" Title="Convert" Level="2" >
         <ComponentGroupRef Id="Convert" />
         <Condition Level="1">EBOOKCONVERTER64</Condition>
       </Feature>

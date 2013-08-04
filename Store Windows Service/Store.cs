@@ -44,18 +44,18 @@ namespace StoreAndConvert.WindowsService
 
                 host.Open();
 
-                Trace.WriteLine("Service host running......");
-                Trace.WriteLine("Listening on");
+                Trace.TraceInformation("Service host running......");
+                Trace.TraceInformation("Listening on");
 
                 foreach (ServiceEndpoint sep in host.Description.Endpoints)
                 {
-                    Trace.WriteLine(string.Format("endpoint: {0} - BindingType: {1}",
+                    Trace.TraceInformation(string.Format("endpoint: {0} - BindingType: {1}",
                         sep.Address, sep.Binding.Name));
                 }
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(string.Format("An error occurred during start up. Exception:", ex));
+                Trace.TraceError("An error occurred during start up. Exception:", ex);
                 throw;
             }
 
@@ -72,7 +72,7 @@ namespace StoreAndConvert.WindowsService
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(ex);
+                Trace.TraceError("Error Stopping", ex);
             }
         }
 

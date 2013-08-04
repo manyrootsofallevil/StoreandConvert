@@ -53,19 +53,21 @@
         <Control Id="lEmail" Type="Text" X="20" Y="110" Width="135" Height="13" Text="Email Address:" />
         <Control Id="Email" Type="Edit" X="161" Y="110" Width="180" Height="15" Property="EMAILADDRESS" ToolTip="The sending email address"/>
         <Control Id="lPassword" Type="Text" X="20" Y="130" Width="135" Height="13" Text="Email Address Password:" />
-        <Control Id="Password" Type="Edit" Password="yes" X="161" Y="130" Width="180" Height="15" Property="PASSWORD" ToolTip="This will be encrypted" />        
-        <Control Id="lCert" Type="Text" X="20" Y="150" Width="135" Height="13" Text="Select Certificate:" />
-        <Control Type="ComboBox" Property="CERT" Id="CertList" X="161" Y="150" Width="180" Height="15" ComboList="yes" Sorted="yes" />
+        <Control Id="Password" Type="Edit" Password="yes" X="161" Y="130" Width="180" Height="15" Property="PASSWORD" ToolTip="This will be encrypted" />
+        <Control Id="lCPassword" Type="Text" X="20" Y="150" Width="135" Height="13" Text="Confirm Email Address Password:" />
+        <Control Id="CPassword" Type="Edit" Password="yes" X="161" Y="150" Width="180" Height="15" Property="CPASSWORD" ToolTip="This will be encrypted" />
+        <Control Id="lCert" Type="Text" X="20" Y="170" Width="135" Height="13" Text="Select Certificate:" />
+        <Control Type="ComboBox" Property="CERT" Id="CertList" X="161" Y="170" Width="180" Height="15" ComboList="yes" Sorted="yes" />
         
 
         
         <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
           <Condition Action="disable">
-            (SSLPORT = "") OR (HTTPPORT="") 
+            <![CDATA[ (SSLPORT = "") OR (HTTPPORT="") OR (PASSWORD<>CPASSWORD)]]>
           </Condition>
           <Condition Action="enable">
-            <![CDATA[(SSLPORT <> "") AND (HTTPPORT<>"") ]]>
+            <![CDATA[(SSLPORT <> "") AND (HTTPPORT<>"") AND (PASSWORD=CPASSWORD)]]>
           </Condition>
         </Control>
         <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back" />

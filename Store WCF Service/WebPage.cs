@@ -13,16 +13,12 @@ namespace StoreAndConvert.WCFService
 {
     public class WebPage
     {
-        Tuple<string, string> pageDetails = null;
-
         public string StoreDirectory { get; set; }
-
 
         public WebPage(string storeDirectory)
         {
             StoreDirectory = storeDirectory;
         }
-
 
         /// <summary>
         /// Store the argument url to a file on directory StoreDirectory.
@@ -37,7 +33,6 @@ namespace StoreAndConvert.WCFService
 
             XDocument xdoc = null;
             string fileName = Path.Combine(StoreDirectory, string.Format("{0:yyyyMMdd}.xml", DateTime.Now));
-
 
             //I don't think content is used for anything. The periodicals use the url and title only
             if (File.Exists(fileName))
@@ -54,8 +49,11 @@ namespace StoreAndConvert.WCFService
                 xdoc.Root.Add(new XElement("RssItem", new XAttribute("title", title)
                            , new XAttribute("content", string.Empty), new XAttribute("URI", url)));
             }
-
-            xdoc.Save(fileName);
+            //oh, I like unnecessary complications.
+            using (StreamWriter outStream = System.IO.File.CreateText(fileName))
+            {
+                xdoc.Save(outStream);
+            }
 
             Trace.WriteLine(string.Format("Stored: {0} on {1}.", url, fileName));
         }

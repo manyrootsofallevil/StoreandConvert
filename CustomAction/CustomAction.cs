@@ -43,7 +43,9 @@ namespace CustomAction
             // Debugger.Launch();
             session.Log("Begin GiveWriteAccess");
 
-            result = CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
+            results = CustomActionHelper.SetAcl(user, session["TempFolder"], session);
+               
+            result = results && CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
                 ? ActionResult.Success : ActionResult.Failure;
 
             session.Log("End GiveWriteAccess");
@@ -59,7 +61,9 @@ namespace CustomAction
             // Debugger.Launch();
             session.Log("Begin GiveWriteAccess");
 
-            result = CustomActionHelper.SetAcl(user, session["INSTALLFOLDER"], session) == true
+            results = CustomActionHelper.RemoveAcl(user, session["TempFolder"], session);
+
+            result = results && CustomActionHelper.RemoveAcl(user, session["INSTALLFOLDER"], session) == true
                 ? ActionResult.Success : ActionResult.Failure;
 
             session.Log("End GiveWriteAccess");
@@ -132,7 +136,7 @@ namespace CustomAction
 
             session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del sslcert ipport=0.0.0.0:{0}", session["SSLPORT"])));
             session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=https://*:{0}/Storeurl", session["SSLPORT"])));
-            session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=http://*:{0}/Storeurl", session["HTTPPORT"])));
+            session.Log("{0}", CustomActionHelper.StartProcess(string.Format("http del urlacl url=http://+:{0}/Storeurl", session["HTTPPORT"])));
             
             result = ActionResult.Success;
 
@@ -141,7 +145,6 @@ namespace CustomAction
             return result;
 
         }
-
 
     }
 

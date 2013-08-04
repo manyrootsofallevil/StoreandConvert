@@ -33,11 +33,14 @@
         <util:XmlFile Id="newsrecipepath"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='newsrecipepath'[\]]/@value"
         Value="[AppDataFolder]Store_n_Convert\heisenbergs.recipe" Permanent="yes"  />
 
+        <util:XmlFile Id="rsssource"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='rsssource'[\]]/@value"
+        Value="[TempFolder]rss.xml" Permanent="yes"  />
+
         <util:XmlFile Id="savefilepath"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='savefilepath'[\]]/@value"
         Value="[INSTALLFOLDER]" Permanent="yes"  />
 
         <util:XmlFile Id="ebookconverter"  File="[INSTALLFOLDER]Convert\Convert.exe.config" Action="setValue" ElementPath="/configuration/appSettings/add[\[]@key='EbookConverter'[\]]/@value"
-        Value="[EBOOKCONVERTER64]ebook-converter.exe" Permanent="yes"  />
+        Value="[EBOOKCONVERTER64]ebook-convert.exe" Permanent="yes"  />
 
         <ServiceInstall DisplayName="Convert Urls to Periodical" Name="ConvertUrls" Description="Convert stored urls by the Store Urls service to ebook (mobi)"
                 Account="NT AUTHORITY\Network Service" Type="ownProcess" Start="auto" Vital="yes" ErrorControl="normal"/>
