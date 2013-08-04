@@ -151,19 +151,17 @@
   </Fragment>
 </Wix>
 
-<!--Things that need thinking about:
+<!--
+TODO(Things that will never be done):
 
-URL reservations for the following ports (probably a good idea to let the user choose ports or even check that it's not in use)
+Write out bookmarklet to respect ports and host name/fqdn.
+Install Self-Signed Cert if no cert is found.
+Create html page with bookmarklet
+Launch html page on successful install
+Improve logging
+Move log files to temp directory
+Tidy up code.
 
-netsh http add urlacl url=https://*:3141/Storeurl user="NT Authority\Network Service"
-netsh http add urlacl url=http://+:2718/Storeurl user="NT Authority\Network Service"
+-->
 
-Clearly need the cert hash to do this (handle lack of cert?). The appid only needs to be a guid
 
-netsh http add sslcert ipport=0.0.0.0:3141 certhash=7a134ae770ddde8eed4a313dda7bea19996a21a5 appid="{FEEDDECAF-DEAD-1BED-DEAF-01BEEFDECADE}"
-
-Permissions for directories need to be set
-
-Change config file so that the directories are relative (probably program files)
-
-Write out bookmarklet to respect ports and host name/fqdn-->
