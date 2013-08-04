@@ -98,6 +98,8 @@ namespace Convert
             config.AppSettings.Settings["NextRunTime"].Value = runTime.ToString();
             config.Save();
 
+            Trace.TraceInformation("Next RunTime {0}", runTime);
+
             ConfigurationManager.RefreshSection("appSettings");
 
             return runTime;
