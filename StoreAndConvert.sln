@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostFeed", "HostFeed\HostFe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomAction", "CustomAction\CustomAction.csproj", "{06FA3049-9E37-4881-A21E-CFC433789443}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{CF9E6387-9BBF-4433-A65A-72182E69C796}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,16 @@ Global
 		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|Mixed Platforms.Build.0 = Release|x86
 		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|x86.ActiveCfg = Release|x86
 		{06FA3049-9E37-4881-A21E-CFC433789443}.Release|x86.Build.0 = Release|x86
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CF9E6387-9BBF-4433-A65A-72182E69C796}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

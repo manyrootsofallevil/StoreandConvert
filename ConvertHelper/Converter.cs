@@ -41,7 +41,7 @@ namespace ConvertHelper
                 completedConversion = RunExternalApplication.RunExternalApp(AppType.EbookConverter,
                        string.Format("{0} \"{1}\" --authors {2} --title {3} --cover {4}",
                        ConfigurationManager.AppSettings["newsrecipepath"], saveFileName,
-                       ConfigurationManager.AppSettings["author"], DateTime.Now.ToString("\"dd-MMM-yyyy\""),
+                       ConfigurationManager.AppSettings["author"], String.Format("\"{0}\"",DateTime.Now.ToString("dd-MMM-yyyy")),
                         string.Format("\"{0}\\frontpage.jpg\"", exePath.Trim('\\'))));
             }
             else
@@ -49,7 +49,7 @@ namespace ConvertHelper
                 completedConversion = RunExternalApplication.RunExternalApp(AppType.EbookConverter,
                        string.Format("{0} \"{1}\" --authors {2} --title {3}",
                        ConfigurationManager.AppSettings["newsrecipepath"], saveFileName,
-                       ConfigurationManager.AppSettings["author"], DateTime.Now.ToString("\"dd-MMM-yyyy\"")));
+                       ConfigurationManager.AppSettings["author"], String.Format("\"{0}\"", DateTime.Now.ToString("dd-MMM-yyyy"))));
             }
 
             if (completedConversion)
