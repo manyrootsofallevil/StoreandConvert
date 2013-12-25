@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Misc\Bookmarklet.txt" />
+    <Content Include="Misc\ebook.ico" />
     <Content Include="Misc\localhost.recipe" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />

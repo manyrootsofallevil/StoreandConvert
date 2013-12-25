@@ -3,7 +3,7 @@
   <Product Id="63C69432-ADC1-4A6E-9DF3-4D0CC57F505F"
            Name="Store and Convert"
            Language="1033"
-           Version="1.0.0.0" Manufacturer="Manyrootsofallevil Inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
+           Version="1.0.0.1" Manufacturer="Manyrootsofallevil Inc." UpgradeCode="55B78347-DDC4-456E-95F3-4408C571505F">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  Platform="x64" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
@@ -22,6 +22,11 @@
       <RegistrySearch Id="FindCalibre" Root="HKLM" Key="SOFTWARE\calibre 64bit\Installer"  Name="InstallPath" Type="raw" Win64="yes"/>
     </Property>
 
+       <Icon Id="ebook" SourceFile="Misc\ebook.ico"/>
+    
+    <!--This is the add/remove product icon-->
+    <Property Id="ARPPRODUCTICON" Value="ebook" />
+    
     <Property Id="CUSTOMRECIPES"/>
 
     <Property Id="SSLPORT" Value="31415"/>
