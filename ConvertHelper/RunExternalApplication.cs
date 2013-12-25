@@ -37,13 +37,20 @@ namespace ConvertHelper
 
                     while (!proc.StandardOutput.EndOfStream)
                     {
-                        string line = proc.StandardOutput.ReadLine().ToLower();
-
-                        Trace.TraceInformation(line, "HTMLJoiner");
-
-                        if (line.Contains("output saved"))
+                        try
                         {
-                            output = true;
+                            string line = proc.StandardOutput.ReadLine().ToLower();
+
+                            Trace.TraceInformation(line, "HTMLJoiner");
+
+                            if (line.Contains("output saved"))
+                            {
+                                output = true;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.TraceError("An error ocurred: {0}",ex);
                         }
                     }
                     break;
