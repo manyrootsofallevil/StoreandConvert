@@ -200,6 +200,7 @@ namespace CustomAction
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.Start();
 
             string result = process.StandardOutput.ReadToEnd();
