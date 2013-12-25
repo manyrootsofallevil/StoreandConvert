@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,8 +51,36 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Convert.cs" />
     <Compile Include="Store.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConvertHelper\ConvertHelper.csproj">
+      <Project>{94ce1596-c59c-453a-becf-ff60bb32dcc4}</Project>
+      <Name>ConvertHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Convert\Convert.csproj">
+      <Project>{a5acc9d3-01be-4a75-a611-c37f9e395c40}</Project>
+      <Name>Convert</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HostFeed\HostFeed.csproj">
+      <Project>{3c451a60-cb7a-4342-9d41-05b342bcba6b}</Project>
+      <Name>HostFeed</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Store WCF Service\Store WCF Service.csproj">
+      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
+      <Name>Store WCF Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Store Windows Service\Store.csproj">
+      <Project>{82c690cb-c0c1-4713-9ef4-64dc0990cc4b}</Project>
+      <Name>Store</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Convert\App.config">
+      <Link>App.config</Link>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
