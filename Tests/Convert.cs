@@ -16,9 +16,6 @@ namespace Tests
     [TestClass]
     public class Convert
     {
-        const string storeDirectory = @"C:\Users\John\Downloads\WebPages\";
-        const string backupDirectory = @"C:\Users\John\Downloads\WebPages\Backup";
-
         public Convert()
         {
             //
@@ -78,7 +75,7 @@ namespace Tests
 
                 host.Start();
 
-                List<HTMLPage> webPages = FileHandler.GetFiles(storeDirectory);
+                List<HTMLPage> webPages = FileHandler.GetFiles(ConfigurationManager.AppSettings["StoreDirectory"]);
 
                 CreateRSSData.CreateRSSItems(webPages);
 
